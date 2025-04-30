@@ -14,12 +14,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
   }
 
   results.forEach(recipe => {
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <h3>${recipe.title}</h3>
-      <p><strong>רכיבים:</strong> ${recipe.ingredients.join(', ')}</p>
-      <p><strong>הוראות:</strong> ${recipe.instructions}</p>
-    `;
+    const div = createRecipeCard(recipe);
     resultsDiv.appendChild(div);
   });
 });
@@ -76,13 +71,39 @@ document.getElementById('loadFavoritesBtn').addEventListener('click', async () =
   for (let fav of favorites) {
     const res = await fetch(`${apiBase}/recipeById/${fav.recipeId}`);
     const recipe = await res.json();
-
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <h4>${recipe.title}</h4>
-      <p><strong>רכיבים:</strong> ${recipe.ingredients.join(', ')}</p>
-      <p><strong>הוראות:</strong> ${recipe.instructions}</p>
-    `;
+    const div = createRecipeCard(recipe);
     favDiv.appendChild(div);
   }
 });
+
+// 🧠 פונקציה חדשה – קריאה לשרת לקבלת שדרוג מ-AI
+async function suggestEnhancement(recipe, targetId) {
+  const suggestionBox = document.getElementById(targetId);
+  suggestionBox.innerText = "טוען הצעה מ-AI...";
+
+  const res = await fetch(`${apiBase}/suggestEnhancement`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(recipe),
+  });
+
+  const data = await res.json();
+  suggestionBox.innerText = data.suggestion || 'לא התקבלה הצעה';
+}
+
+// 🧱 בניית כרטיס מתכון עם כפתור שדרוג
+function createRecipeCard(recipe) {
+  const div = document.createElement('div');
+  const suggestionId = `suggestion-${recipe._id || recipe.recipeId}`;
+
+  div.innerHTML = `
+    <h3>${recipe.title}</h3>
+    <p><strong>רכיבים:</strong> ${recipe.ingredients.join(', ')}</p>
+    <p><strong>הוראות:</strong> ${recipe.instructions}</p>
+    <button onclick='suggestEnhancement(${JSON.stringify(recipe)}, "${suggestionId}")'>שדרג עם AI</button>
+    <div id="${suggestionId}" style="margin-top:10px;color:green;"></div>
+    <hr>
+  `;
+
+  return div;
+}
