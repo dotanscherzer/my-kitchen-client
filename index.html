@@ -3,26 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <title>המטבח האישי שלי</title>
-  <script src="script.js" defer></script>
+  <style>
+    body {
+      direction: rtl;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      padding: 30px;
+    }
+    input, textarea, button {
+      margin: 8px;
+      padding: 6px;
+      width: 300px;
+    }
+    #results, #favorites {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
+
   <h1>המטבח האישי שלי</h1>
 
+  <!-- חיפוש מתכונים -->
   <h2>חפש מתכונים</h2>
-  <input id="searchInput" placeholder="עוף" />
-  <button onclick="searchRecipes()">חפש</button>
-  <div id="searchResults"></div>
+  <input id="searchInput" placeholder="עוף, פסטה,..." />
+  <button id="searchBtn">חפש</button>
+  <div id="results"></div>
 
+  <!-- שמירה למועדפים -->
+  <button id="saveFavoriteBtn">הוסף למועדפים</button>
+
+  <!-- הוספת מתכון חדש -->
   <h2>הוסף מתכון חדש</h2>
-  <input id="newTitle" placeholder="שם מתכון" /><br/>
-  <textarea id="newIngredients" placeholder="רכיבים מופרדים בפסיק"></textarea><br/>
-  <textarea id="newInstructions" placeholder="הוראות הכנה"></textarea><br/>
-  <button onclick="addRecipe()">הוסף מתכון</button>
-  <div id="addStatus"></div>
+  <input id="newTitle" placeholder="שם מתכון" /><br>
+  <textarea id="newIngredients" rows="3" placeholder="רכיבים מופרדים בפסיקים"></textarea><br>
+  <textarea id="newInstructions" rows="3" placeholder="הוראות הכנה"></textarea><br>
+  <button id="addBtn">הוסף מתכון</button>
 
+  <!-- מועדפים -->
   <h2>הצג מועדפים</h2>
-  <input id="emailInput" placeholder="example@email.com" />
-  <button onclick="loadFavorites()">טען מועדפים</button>
-  <div id="favoritesList"></div>
+  <input id="email" placeholder="הכנס אימייל לשמירה וטעינה" /><br>
+  <button id="loadFavoritesBtn">טען מועדפים</button>
+  <div id="favorites"></div>
+
+  <script src="script.js"></script>
+
 </body>
 </html>

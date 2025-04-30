@@ -1,66 +1,88 @@
-const API_BASE = 'https://my-kitchen-server.onrender.com';
+const apiBase = 'https://my-kitchen-server.onrender.com';
 
-function searchRecipes() {
+document.getElementById('searchBtn').addEventListener('click', async () => {
   const query = document.getElementById('searchInput').value;
-  fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`)
-    .then(res => res.json())
-    .then(data => {
-      const div = document.getElementById('searchResults');
-      div.innerHTML = '';
-      data.forEach(recipe => {
-        const html = `
-          <h3>${recipe.title}</h3>
-          <p><b>רכיבים:</b> ${recipe.ingredients.join(', ')}</p>
-          <p><b>הוראות:</b> ${recipe.instructions}</p>
-          <button onclick="saveFavorite('${recipe._id}')">הוסף למועדפים</button>
-          <hr/>
-        `;
-        div.innerHTML += html;
-      });
-    });
-}
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
 
-function addRecipe() {
+  const response = await fetch(`${apiBase}/search?query=${query}`);
+  const results = await response.json();
+
+  if (results.length === 0) {
+    resultsDiv.innerHTML = '<p>לא נמצאו מתכונים</p>';
+    return;
+  }
+
+  results.forEach(recipe => {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <h3>${recipe.title}</h3>
+      <p><strong>רכיבים:</strong> ${recipe.ingredients.join(', ')}</p>
+      <p><strong>הוראות:</strong> ${recipe.instructions}</p>
+    `;
+    resultsDiv.appendChild(div);
+  });
+});
+
+document.getElementById('addBtn').addEventListener('click', async () => {
   const title = document.getElementById('newTitle').value;
   const ingredients = document.getElementById('newIngredients').value.split(',');
   const instructions = document.getElementById('newInstructions').value;
 
-  fetch(`${API_BASE}/addRecipe`, {
+  const res = await fetch(`${apiBase}/addRecipe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title, ingredients, instructions })
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById('addStatus').innerText = data.message;
   });
-}
 
-function saveFavorite(recipeId) {
-  const userEmail = document.getElementById('emailInput').value;
+  const data = await res.json();
+  alert(data.message);
+});
+
+document.getElementById('saveFavoriteBtn').addEventListener('click', async () => {
+  const userEmail = document.getElementById('email').value;
+  const title = document.getElementById('searchInput').value;
+
   if (!userEmail) {
-    alert('אנא הזן כתובת אימייל לפני שמירה למועדפים');
+    alert('אנא הכנס כתובת מייל לפני שמירה');
     return;
   }
 
-  fetch(`${API_BASE}/saveFavorite`, {
+  const searchRes = await fetch(`${apiBase}/search?query=${title}`);
+  const recipes = await searchRes.json();
+
+  if (!recipes.length) return alert('לא נמצא מתכון לשמירה');
+
+  const recipeId = recipes[0]._id;
+
+  const res = await fetch(`${apiBase}/saveFavorite`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userEmail, recipeId })
-  })
-  .then(res => res.json())
-  .then(data => alert(data.message));
-}
+  });
 
-function loadFavorites() {
-  const email = document.getElementById('emailInput').value;
-  fetch(`${API_BASE}/getFavorites?email=${encodeURIComponent(email)}`)
-    .then(res => res.json())
-    .then(data => {
-      const div = document.getElementById('favoritesList');
-      div.innerHTML = '';
-      data.forEach(recipe => {
-        div.innerHTML += `<h3>${recipe.title}</h3><p>${recipe.instructions}</p><hr/>`;
-      });
-    });
-}
+  const data = await res.json();
+  alert(data.message);
+});
+
+document.getElementById('loadFavoritesBtn').addEventListener('click', async () => {
+  const email = document.getElementById('email').value;
+  const favDiv = document.getElementById('favorites');
+  favDiv.innerHTML = '';
+
+  const favRes = await fetch(`${apiBase}/getFavorites?email=${email}`);
+  const favorites = await favRes.json();
+
+  for (let fav of favorites) {
+    const res = await fetch(`${apiBase}/recipeById/${fav.recipeId}`);
+    const recipe = await res.json();
+
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <h4>${recipe.title}</h4>
+      <p><strong>רכיבים:</strong> ${recipe.ingredients.join(', ')}</p>
+      <p><strong>הוראות:</strong> ${recipe.instructions}</p>
+    `;
+    favDiv.appendChild(div);
+  }
+});
