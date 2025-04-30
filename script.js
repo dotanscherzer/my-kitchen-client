@@ -1,96 +1,66 @@
-const API_URL = 'https://my-kitchen-server.onrender.com';
+const API_BASE = 'https://my-kitchen-server.onrender.com';
 
-async function searchRecipes() {
-  const query = document.getElementById("searchInput").value;
-  const resultsList = document.getElementById("results");
-  resultsList.innerHTML = "טוען...";
-
-  try {
-    const response = await fetch(`${API_URL}/search?query=${encodeURIComponent(query)}`);
-    const data = await response.json();
-
-    resultsList.innerHTML = "";
-    if (data.length === 0) {
-      resultsList.innerHTML = "<li>לא נמצאו מתכונים</li>";
-      return;
-    }
-
-    data.forEach(recipe => {
-      const li = document.createElement("li");
-      li.innerText = recipe.title;
-      const favBtn = document.createElement("button");
-      favBtn.innerText = "הוסף למועדפים";
-      favBtn.onclick = () => saveFavorite(recipe._id);
-      li.appendChild(favBtn);
-      resultsList.appendChild(li);
-    });
-  } catch (err) {
-    console.error(err);
-    resultsList.innerHTML = "<li>שגיאה</li>";
-  }
-}
-
-async function saveFavorite(recipeId) {
-  const email = document.getElementById("email").value;
-  if (!email) return alert("נא להזין אימייל לפני שמירה למועדפים");
-
-  try {
-    const res = await fetch(`${API_URL}/saveFavorite`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userEmail: email, recipeId })
-    });
-    const result = await res.json();
-    alert(result.message);
-  } catch (err) {
-    console.error(err);
-    alert("שגיאה בשמירה למועדפים");
-  }
-}
-
-async function addRecipe() {
-  const title = document.getElementById("newTitle").value;
-  const ingredients = document.getElementById("newIngredients").value.split(',');
-  const instructions = document.getElementById("newInstructions").value;
-
-  const status = document.getElementById("addStatus");
-
-  try {
-    const res = await fetch(`${API_URL}/addRecipe`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, ingredients, instructions })
-    });
-    const result = await res.json();
-    status.innerText = result.message;
-  } catch (err) {
-    console.error(err);
-    status.innerText = "שגיאה בהוספת מתכון";
-  }
-}
-
-async function loadFavorites() {
-  const email = document.getElementById("email").value;
-  if (!email) return alert("נא להזין אימייל");
-
-  try {
-    const res = await fetch(`${API_URL}/getFavorites?email=${email}`);
-    const data = await res.json();
-
-    const list = document.getElementById("favoritesList");
-    list.innerHTML = "";
-
-    if (data.length === 0) {
-      list.innerHTML = "<li>אין מועדפים</li>";
-    } else {
-      data.forEach(fav => {
-        const li = document.createElement("li");
-        li.innerText = `ID מתכון: ${fav.recipeId}`;
-        list.appendChild(li);
+function searchRecipes() {
+  const query = document.getElementById('searchInput').value;
+  fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => {
+      const div = document.getElementById('searchResults');
+      div.innerHTML = '';
+      data.forEach(recipe => {
+        const html = `
+          <h3>${recipe.title}</h3>
+          <p><b>רכיבים:</b> ${recipe.ingredients.join(', ')}</p>
+          <p><b>הוראות:</b> ${recipe.instructions}</p>
+          <button onclick="saveFavorite('${recipe._id}')">הוסף למועדפים</button>
+          <hr/>
+        `;
+        div.innerHTML += html;
       });
-    }
-  } catch (err) {
-    console.error(err);
-    alert("שגיאה בטעינת מועדפים");
+    });
+}
+
+function addRecipe() {
+  const title = document.getElementById('newTitle').value;
+  const ingredients = document.getElementById('newIngredients').value.split(',');
+  const instructions = document.getElementById('newInstructions').value;
+
+  fetch(`${API_BASE}/addRecipe`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, ingredients, instructions })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('addStatus').innerText = data.message;
+  });
+}
+
+function saveFavorite(recipeId) {
+  const userEmail = document.getElementById('emailInput').value;
+  if (!userEmail) {
+    alert('אנא הזן כתובת אימייל לפני שמירה למועדפים');
+    return;
   }
+
+  fetch(`${API_BASE}/saveFavorite`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userEmail, recipeId })
+  })
+  .then(res => res.json())
+  .then(data => alert(data.message));
+}
+
+function loadFavorites() {
+  const email = document.getElementById('emailInput').value;
+  fetch(`${API_BASE}/getFavorites?email=${encodeURIComponent(email)}`)
+    .then(res => res.json())
+    .then(data => {
+      const div = document.getElementById('favoritesList');
+      div.innerHTML = '';
+      data.forEach(recipe => {
+        div.innerHTML += `<h3>${recipe.title}</h3><p>${recipe.instructions}</p><hr/>`;
+      });
+    });
 }

@@ -1,36 +1,28 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he">
 <head>
   <meta charset="UTF-8">
   <title>המטבח האישי שלי</title>
-  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <h1>המטבח האישי שלי</h1>
 
-  <section>
-    <h2>חפש מתכונים</h2>
-    <input type="text" id="searchInput" placeholder="חפש מתכון...">
-    <button onclick="searchRecipes()">חפש</button>
-    <ul id="results"></ul>
-  </section>
+  <h2>חפש מתכונים</h2>
+  <input id="searchInput" placeholder="עוף" />
+  <button onclick="searchRecipes()">חפש</button>
+  <div id="searchResults"></div>
 
-  <section>
-    <h2>הוסף מתכון חדש</h2>
-    <input type="text" id="newTitle" placeholder="שם המתכון"><br>
-    <textarea id="newIngredients" placeholder="רכיבים (מופרדים בפסיק)"></textarea><br>
-    <textarea id="newInstructions" placeholder="הוראות הכנה"></textarea><br>
-    <button onclick="addRecipe()">הוסף מתכון</button>
-    <p id="addStatus"></p>
-  </section>
+  <h2>הוסף מתכון חדש</h2>
+  <input id="newTitle" placeholder="שם מתכון" /><br/>
+  <textarea id="newIngredients" placeholder="רכיבים מופרדים בפסיק"></textarea><br/>
+  <textarea id="newInstructions" placeholder="הוראות הכנה"></textarea><br/>
+  <button onclick="addRecipe()">הוסף מתכון</button>
+  <div id="addStatus"></div>
 
-  <section>
-    <h2>הצג מועדפים</h2>
-    <input type="text" id="email" placeholder="האימייל שלך">
-    <button onclick="loadFavorites()">טען מועדפים</button>
-    <ul id="favoritesList"></ul>
-  </section>
-
-  <script src="script.js"></script>
+  <h2>הצג מועדפים</h2>
+  <input id="emailInput" placeholder="example@email.com" />
+  <button onclick="loadFavorites()">טען מועדפים</button>
+  <div id="favoritesList"></div>
 </body>
 </html>
