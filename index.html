@@ -3,57 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>המטבח האישי שלי</title>
-  <style>
-    body {
-      direction: rtl;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f4f4f4;
-      padding: 30px;
-    }
-    input, textarea, button {
-      margin: 8px;
-      padding: 6px;
-      width: 300px;
-    }
-    #results, #favorites {
-      margin-top: 20px;
-      padding: 15px;
-      background: #fff;
-      border: 1px solid #ccc;
-    }
-    h2 {
-      margin-top: 40px;
-    }
-  </style>
+  <script src="script.js" defer></script>
 </head>
-<body>
-
+<body style="direction: rtl; font-family: Arial; padding: 40px;">
   <h1>המטבח האישי שלי</h1>
 
-  <!-- חיפוש מתכונים -->
-  <h2>חפש מתכונים</h2>
-  <input id="searchInput" placeholder="עוף, פסטה,..." />
+  <input id="email" placeholder="כתובת אימייל">
+  <input id="searchInput" placeholder="חפש מתכון">
   <button id="searchBtn">חפש</button>
+  <button id="saveFavoriteBtn">שמור למועדפים</button>
+  <button id="loadFavoritesBtn">טען מועדפים</button>
+
+  <h3>הוספת מתכון חדש</h3>
+  <input id="newTitle" placeholder="שם מתכון">
+  <input id="newIngredients" placeholder="רכיבים (מופרדים בפסיקים)">
+  <input id="newInstructions" placeholder="הוראות הכנה">
+  <button id="addBtn">הוסף</button>
+
+  <h3>תוצאות חיפוש:</h3>
   <div id="results"></div>
 
-  <!-- שמירה למועדפים -->
-  <button id="saveFavoriteBtn">הוסף למועדפים</button>
-
-  <!-- הוספת מתכון חדש -->
-  <h2>הוסף מתכון חדש</h2>
-  <input id="newTitle" placeholder="שם מתכון" /><br>
-  <textarea id="newIngredients" rows="3" placeholder="רכיבים מופרדים בפסיקים"></textarea><br>
-  <textarea id="newInstructions" rows="3" placeholder="הוראות הכנה"></textarea><br>
-  <button id="addBtn">הוסף מתכון</button>
-
-  <!-- מועדפים -->
-  <h2>הצג מועדפים</h2>
-  <input id="email" placeholder="הכנס אימייל לשמירה וטעינה" /><br>
-  <button id="loadFavoritesBtn">טען מועדפים</button>
+  <h3>מועדפים:</h3>
   <div id="favorites"></div>
-
-  <script src="script.js"></script>
-
 </body>
 </html>
