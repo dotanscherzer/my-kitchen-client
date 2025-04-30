@@ -3,27 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <title>המטבח האישי שלי</title>
-  <script src="script.js" defer></script>
 </head>
-<body style="direction: rtl; font-family: Arial; padding: 40px;">
+<body style="direction: rtl; text-align: center; font-family: sans-serif;">
+
   <h1>המטבח האישי שלי</h1>
 
-  <input id="email" placeholder="כתובת אימייל">
-  <input id="searchInput" placeholder="חפש מתכון">
-  <button id="searchBtn">חפש</button>
-  <button id="saveFavoriteBtn">שמור למועדפים</button>
-  <button id="loadFavoritesBtn">טען מועדפים</button>
+  <h2>חפש מתכונים</h2>
+  <input type="text" id="searchInput" placeholder="עוף">
+  <input type="text" id="emailInput" placeholder="example@email.com">
+  <button onclick="searchRecipe()">חפש</button>
+  <button onclick="saveFavorite()">שמור למועדפים</button>
+  <button onclick="loadFavorites()">טען מועדפים</button>
 
-  <h3>הוספת מתכון חדש</h3>
-  <input id="newTitle" placeholder="שם מתכון">
-  <input id="newIngredients" placeholder="רכיבים (מופרדים בפסיקים)">
-  <input id="newInstructions" placeholder="הוראות הכנה">
-  <button id="addBtn">הוסף</button>
+  <div id="searchResults" style="margin: 20px;"></div>
 
-  <h3>תוצאות חיפוש:</h3>
-  <div id="results"></div>
+  <h2>הוסף מתכון חדש</h2>
+  <input type="text" id="newTitle" placeholder="שם מתכון"><br><br>
+  <textarea id="newIngredients" rows="2" cols="40" placeholder="רכיבים (מופרדים בפסיקים)"></textarea><br><br>
+  <textarea id="newInstructions" rows="2" cols="40" placeholder="הוראות הכנה"></textarea><br><br>
+  <button onclick="addRecipe()">הוסף</button>
 
-  <h3>מועדפים:</h3>
+  <h2>מועדפים:</h2>
   <div id="favorites"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
