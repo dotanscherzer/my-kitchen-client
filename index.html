@@ -7,11 +7,29 @@
 </head>
 <body>
   <h1>המטבח האישי שלי</h1>
-  <div class="search-container">
+
+  <section>
+    <h2>חפש מתכונים</h2>
     <input type="text" id="searchInput" placeholder="חפש מתכון...">
     <button onclick="searchRecipes()">חפש</button>
-  </div>
-  <ul id="results"></ul>
+    <ul id="results"></ul>
+  </section>
+
+  <section>
+    <h2>הוסף מתכון חדש</h2>
+    <input type="text" id="newTitle" placeholder="שם המתכון"><br>
+    <textarea id="newIngredients" placeholder="רכיבים (מופרדים בפסיק)"></textarea><br>
+    <textarea id="newInstructions" placeholder="הוראות הכנה"></textarea><br>
+    <button onclick="addRecipe()">הוסף מתכון</button>
+    <p id="addStatus"></p>
+  </section>
+
+  <section>
+    <h2>הצג מועדפים</h2>
+    <input type="text" id="email" placeholder="האימייל שלך">
+    <button onclick="loadFavorites()">טען מועדפים</button>
+    <ul id="favoritesList"></ul>
+  </section>
 
   <script src="script.js"></script>
 </body>
