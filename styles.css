@@ -31,3 +31,71 @@ ul {
   list-style-type: none;
   padding: 0;
 }
+
+.recipes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.recipe-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #e0e0e0;
+  padding: 24px 18px 18px 18px;
+  width: 340px;
+  text-align: right;
+  margin-bottom: 10px;
+  transition: box-shadow 0.2s;
+}
+.recipe-card:hover {
+  box-shadow: 0 4px 16px #b0b0b0;
+}
+
+.recipe-card h3 {
+  margin-top: 0;
+  color: #2a7a2a;
+}
+
+.recipe-card ul {
+  text-align: right;
+  margin: 0 0 10px 0;
+  padding-right: 18px;
+  direction: rtl;
+}
+
+.recipe-card .instructions {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.favorite-btn {
+  background: #ffecb3;
+  color: #a67c00;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.favorite-btn:hover {
+  background: #ffe082;
+}
+
+.enhance-btn {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.enhance-btn:hover {
+  background: #bbdefb;
+}

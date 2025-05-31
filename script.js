@@ -8,17 +8,29 @@ async function searchRecipe() {
   const container = document.getElementById("searchResults");
   container.innerHTML = "";
 
+  const list = document.createElement("div");
+  list.className = "recipes-list";
+
   recipes.forEach((recipe) => {
     const card = document.createElement("div");
+    card.className = "recipe-card";
     card.innerHTML = `
       <h3>${recipe.title}</h3>
-      <b>רכיבים:</b> ${recipe.ingredients.join(", ")}<br>
-      <b>הוראות:</b> ${recipe.instructions}<br>
+      <b>רכיבים:</b>
+      <ul>${recipe.ingredients.map((ing) => `<li>${ing}</li>`).join("")}</ul>
+      <b>הוראות:</b>
+      <div class="instructions">${recipe.instructions}</div>
     `;
 
     const enhanceBtn = document.createElement("button");
     enhanceBtn.innerText = "שדרג עם AI";
     enhanceBtn.onclick = () => enhanceRecipe(recipe);
+    enhanceBtn.className = "enhance-btn";
+
+    const favBtn = document.createElement("button");
+    favBtn.innerText = "הוסף למועדפים";
+    favBtn.onclick = () => saveFavoriteForRecipe(recipe._id || recipe.recipeId);
+    favBtn.className = "favorite-btn";
 
     const suggestionDiv = document.createElement("div");
     suggestionDiv.id = `suggestion-${recipe._id || recipe.recipeId}`;
@@ -26,9 +38,11 @@ async function searchRecipe() {
     suggestionDiv.style.color = "green";
 
     card.appendChild(enhanceBtn);
+    card.appendChild(favBtn);
     card.appendChild(suggestionDiv);
-    container.appendChild(card);
+    list.appendChild(card);
   });
+  container.appendChild(list);
 }
 
 async function addRecipe() {
@@ -51,29 +65,26 @@ async function addRecipe() {
   }
 }
 
-async function saveFavorite() {
+async function saveFavoriteForRecipe(recipeId) {
   const email = document.getElementById("emailInput").value;
-  const recipeId = document.getElementById("searchResults").querySelector("h3")
-    ? document.getElementById("searchResults").querySelector("h3").nextSibling
-        .nextSibling.textContent
-    : null;
-
   if (!email || !recipeId) {
     alert("אנא הזן אימייל וודא שיש תוצאה לחיפוש");
     return;
   }
-
   const res = await fetch(`${apiBase}/saveFavorite`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userEmail: email, recipeId }),
   });
-
   if (res.ok) {
     alert("נשמר בהצלחה");
   } else {
     alert("שגיאה בשמירה");
   }
+}
+
+function saveFavorite() {
+  alert("השתמש בכפתור 'הוסף למועדפים' ליד כל מתכון.");
 }
 
 async function loadFavorites() {
