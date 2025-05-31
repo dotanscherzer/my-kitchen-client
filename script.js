@@ -17,7 +17,11 @@ async function searchRecipe() {
     card.innerHTML = `
       <h3>${recipe.title}</h3>
       <b>רכיבים:</b>
-      <ul>${recipe.ingredients.map((ing) => `<li>${ing}</li>`).join("")}</ul>
+      <table>
+        <tbody>
+          ${recipe.ingredients.map((ing) => `<tr><td>${ing}</td></tr>`).join("")}
+        </tbody>
+      </table>
       <b>הוראות:</b>
       <div class="instructions">${recipe.instructions}</div>
     `;
