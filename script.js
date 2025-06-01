@@ -141,23 +141,65 @@ async function generateRecipeFromIngredients() {
     alert("שגיאה ביצירת מתכון");
     return;
   }
-  const recipe = await res.json();
+  const data = await res.json();
+  const recipeText = data.recipe || "לא התקבל מתכון";
 
-  // הצג את המתכון שנוצר
+  // --- פירוק המחרוזת ---
+  // חילוץ כותרת
+  let title = "מתכון שנוצר עבורך";
+  let ingredientsArr = [];
+  let instructionsArr = [];
+  let tipsArr = [];
+
+  // חילוץ כותרת
+  const titleMatch = recipeText.match(/שם המתכון: (.+)/);
+  if (titleMatch) title = titleMatch[1].trim();
+
+  // חילוץ רכיבים
+  const ingredientsMatch = recipeText.match(/מרכיבים:\n([\s\S]*?)\n\nהוראות הכנה:/);
+  if (ingredientsMatch) {
+    ingredientsArr = ingredientsMatch[1]
+      .split("\n")
+      .map(line => line.replace(/^[-•\s]+/, "").trim())
+      .filter(Boolean);
+  }
+
+  // חילוץ הוראות
+  const instructionsMatch = recipeText.match(/הוראות הכנה:\n([\s\S]*?)(\n\n|$)/);
+  if (instructionsMatch) {
+    instructionsArr = instructionsMatch[1]
+      .split(/\n\d+\. /)
+      .map(line => line.replace(/^\d+\.\s*/, "").trim())
+      .filter(Boolean);
+  }
+
+  // חילוץ טיפים/הערות (לא חובה)
+  const tipsMatch = recipeText.match(/טיפים והערות:\n([\s\S]*)/);
+  if (tipsMatch) {
+    tipsArr = tipsMatch[1]
+      .split("\n-")
+      .map(line => line.replace(/^[-\s]+/, "").trim())
+      .filter(Boolean);
+  }
+
+  // הצגה בדף
   const container = document.getElementById("searchResults");
   container.innerHTML = "";
   const card = document.createElement("div");
   card.className = "recipe-card";
   card.innerHTML = `
-    <h3>${recipe.title || "מתכון שנוצר עבורך"}</h3>
+    <h3>${title}</h3>
     <b>רכיבים:</b>
-    <table>
-      <tbody>
-        ${recipe.ingredients.map((ing) => `<tr><td>${ing}</td></tr>`).join("")}
-      </tbody>
-    </table>
+    <table><tbody>
+      ${ingredientsArr.map(ing => `<tr><td>${ing}</td></tr>`).join("")}
+    </tbody></table>
     <b>הוראות:</b>
-    <div class="instructions">${recipe.instructions}</div>
+    <div class="instructions">
+      <ol style="padding-right:18px;">
+        ${instructionsArr.map(step => `<li>${step}</li>`).join("")}
+      </ol>
+    </div>
+    ${tipsArr.length ? `<b>טיפים והערות:</b><ul>${tipsArr.map(tip => `<li>${tip}</li>`).join("")}</ul>` : ""}
   `;
   container.appendChild(card);
 }
