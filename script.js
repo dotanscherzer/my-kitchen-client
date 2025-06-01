@@ -125,3 +125,39 @@ async function enhanceRecipe(recipe) {
     suggestionDiv.innerText = "שגיאה בשדרוג המתכון";
   }
 }
+
+async function generateRecipeFromIngredients() {
+  const ingredients = document.getElementById("myIngredientsInput").value;
+  if (!ingredients.trim()) {
+    alert("אנא הזן רכיבים");
+    return;
+  }
+  const res = await fetch(`${apiBase}/generateRecipe`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ingredients: ingredients.split(",") }),
+  });
+  if (!res.ok) {
+    alert("שגיאה ביצירת מתכון");
+    return;
+  }
+  const recipe = await res.json();
+
+  // הצג את המתכון שנוצר
+  const container = document.getElementById("searchResults");
+  container.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "recipe-card";
+  card.innerHTML = `
+    <h3>${recipe.title || "מתכון שנוצר עבורך"}</h3>
+    <b>רכיבים:</b>
+    <table>
+      <tbody>
+        ${recipe.ingredients.map((ing) => `<tr><td>${ing}</td></tr>`).join("")}
+      </tbody>
+    </table>
+    <b>הוראות:</b>
+    <div class="instructions">${recipe.instructions}</div>
+  `;
+  container.appendChild(card);
+}
