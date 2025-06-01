@@ -163,7 +163,6 @@ async function generateRecipeFromIngredients() {
     let foundSection = false;
     lines.forEach(line => {
       const trimmed = line.trim();
-      if (!trimmed) return; // דלג על שורות ריקות
       // כותרת משנה (למשל: **בקר:**)
       const sectionMatch = trimmed.match(/^\*\*(.+?)\*\*:?$/);
       if (sectionMatch) {
@@ -184,6 +183,7 @@ async function generateRecipeFromIngredients() {
           ingredientsArr[0].items.push(trimmed.replace(/^\*\s*/, '').trim());
         }
       }
+      // אם השורה ריקה, לא עושים כלום, אבל לא מאפסים את currentSection!
     });
   }
 
