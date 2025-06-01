@@ -169,21 +169,20 @@ async function generateRecipeFromIngredients() {
         foundSection = true;
         currentSection = { title: sectionMatch[1], items: [] };
         ingredientsArr.push(currentSection);
+        // לא מאפסים currentSection גם אם יש שורות ריקות אחרי כותרת!
       } else if (trimmed.startsWith('*')) {
         if (currentSection) {
           currentSection.items.push(trimmed.replace(/^\*\s*/, '').trim());
         } else if (foundSection) {
-          // יש כותרת קודמת, אבל לא נוכחית
           ingredientsArr.push({ title: '', items: [trimmed.replace(/^\*\s*/, '').trim()] });
         } else {
-          // אין אף כותרת משנה - רשימה רגילה
           if (ingredientsArr.length === 0) {
             ingredientsArr.push({ title: '', items: [] });
           }
           ingredientsArr[0].items.push(trimmed.replace(/^\*\s*/, '').trim());
         }
       }
-      // אם השורה ריקה, לא עושים כלום, אבל לא מאפסים את currentSection!
+      // שורות ריקות פשוט מתעלמים מהן, לא מאפסים currentSection!
     });
   }
 
