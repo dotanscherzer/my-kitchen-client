@@ -156,7 +156,7 @@ async function generateRecipeFromIngredients() {
 
   // חילוץ רכיבים (כולל תתי-רשימות, שורות ריקות, כותרות משנה, רשימה רגילה, ושורות עם '* **כותרת:** תוכן')
   let ingredientsArr = [];
-  const ingredientsMatch = recipeText.match(/\*\*רכיבים(?:\s*\([^)]+\))?\s*:?\*\*([\s\S]*?)(?=\*\*הוראות|\*\*הוראות הכנה|\*\*הוראות הכנה:\*\*|\*\*הוראות:\*\*|\n\n)/);
+  const ingredientsMatch = recipeText.match(/\*\*רכיבים(?:\s*\([^)]+\))?\s*:?\*\*([\s\S]*?)(?=\*\*[^*]+?\*\*|$)/);
   if (ingredientsMatch) {
     const lines = ingredientsMatch[1].split('\n');
     let currentSection = null;
@@ -179,14 +179,14 @@ async function generateRecipeFromIngredients() {
         ingredientsArr.push(currentSection);
       } else if (trimmed.startsWith('*')) {
         if (currentSection) {
-          currentSection.items.push(trimmed.replace(/^\*\s*/, '').trim());
+          currentSection.items.push(trimmed.replace(/^(\*\s*)/, '').trim());
         } else if (foundSection) {
-          ingredientsArr.push({ title: '', items: [trimmed.replace(/^\*\s*/, '').trim()] });
+          ingredientsArr.push({ title: '', items: [trimmed.replace(/^(\*\s*)/, '').trim()] });
         } else {
           if (ingredientsArr.length === 0) {
             ingredientsArr.push({ title: '', items: [] });
           }
-          ingredientsArr[0].items.push(trimmed.replace(/^\*\s*/, '').trim());
+          ingredientsArr[0].items.push(trimmed.replace(/^(\*\s*)/, '').trim());
         }
       }
       // שורות ריקות פשוט מתעלמים מהן, לא מאפסים currentSection!
