@@ -154,15 +154,40 @@ async function generateRecipeFromIngredients() {
   const descMatch = recipeText.match(/\*\*תיאור:\*\*\s*([\s\S]*?)\n\*\*/);
   if (descMatch) description = descMatch[1].trim();
 
-  // חילוץ רכיבים
+  // חילוץ רכיבים (כולל תתי-רשימות)
   let ingredientsArr = [];
-  const ingredientsMatch = recipeText.match(/\*\*רכיבים:\*\*[\s\S]*?((?:\*|\d+\.|-).+?)(?=\n\*\*הוראות הכנה|\n\*\*הוראות הכנה:\*\*|\n\*\*הוראות:\*\*|\n\*\*הוראות הכנה\*\*|\n\*\*הוראות\*\*|\n\n)/);
+  const ingredientsMatch = recipeText.match(/\*\*רכיבים:\*\*([\s\S]*?)(?=\*\*הוראות|\*\*הוראות הכנה|\*\*הוראות הכנה:\*\*|\*\*הוראות:\*\*|\n\n)/);
   if (ingredientsMatch) {
-    ingredientsArr = ingredientsMatch[1]
-      .split(/\n/)
-      .map(line => line.replace(/^\*+|^-+|\d+\.|\s+/g, '').trim())
-      .filter(Boolean);
+    const lines = ingredientsMatch[1].split('\n').map(l => l.trim()).filter(Boolean);
+    let currentSection = null;
+    lines.forEach(line => {
+      // כותרת משנה (למשל: **בשר:**)
+      const sectionMatch = line.match(/^\*\*(.+?)\*\*:?$/);
+      if (sectionMatch) {
+        currentSection = { title: sectionMatch[1], items: [] };
+        ingredientsArr.push(currentSection);
+      } else if (line.startsWith('*')) {
+        // רכיב תחת כותרת
+        if (currentSection) {
+          currentSection.items.push(line.replace(/^\*\s*/, '').trim());
+        } else {
+          // רכיב ללא כותרת
+          ingredientsArr.push({ title: '', items: [line.replace(/^\*\s*/, '').trim()] });
+        }
+      }
+    });
   }
+
+  // הצגה בטבלה
+  let ingredientsTable = '';
+  ingredientsArr.forEach(section => {
+    if (section.title) {
+      ingredientsTable += `<tr><th colspan="1" style="background:#e0f2f1;color:#00796b;">${section.title}</th></tr>`;
+    }
+    section.items.forEach(item => {
+      ingredientsTable += `<tr><td>${item}</td></tr>`;
+    });
+  });
 
   // חילוץ הוראות
   let instructionsArr = [];
@@ -204,7 +229,7 @@ async function generateRecipeFromIngredients() {
     ${description ? `<div style="color:#1976d2; margin-bottom:10px;">${description}</div>` : ""}
     <b>רכיבים:</b>
     <table><tbody>
-      ${ingredientsArr.map(ing => `<tr><td>${ing}</td></tr>`).join("")}
+      ${ingredientsTable}
     </tbody></table>
     <b>הוראות:</b>
     <div class="instructions">
