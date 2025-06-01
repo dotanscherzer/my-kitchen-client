@@ -154,27 +154,34 @@ async function generateRecipeFromIngredients() {
   const descMatch = recipeText.match(/\*\*תיאור:\*\*\s*([\s\S]*?)\n\*\*/);
   if (descMatch) description = descMatch[1].trim();
 
-  // חילוץ רכיבים (כולל תתי-רשימות, שורות ריקות, כותרות משנה)
+  // חילוץ רכיבים (כולל תתי-רשימות, שורות ריקות, כותרות משנה, ורשימה רגילה)
   let ingredientsArr = [];
   const ingredientsMatch = recipeText.match(/\*\*רכיבים:\*\*([\s\S]*?)(?=\*\*הוראות|\*\*הוראות הכנה|\*\*הוראות הכנה:\*\*|\*\*הוראות:\*\*|\n\n)/);
   if (ingredientsMatch) {
     const lines = ingredientsMatch[1].split('\n');
     let currentSection = null;
+    let foundSection = false;
     lines.forEach(line => {
       const trimmed = line.trim();
       if (!trimmed) return; // דלג על שורות ריקות
       // כותרת משנה (למשל: **בקר:**)
       const sectionMatch = trimmed.match(/^\*\*(.+?)\*\*:?$/);
       if (sectionMatch) {
+        foundSection = true;
         currentSection = { title: sectionMatch[1], items: [] };
         ingredientsArr.push(currentSection);
       } else if (trimmed.startsWith('*')) {
-        // רכיב תחת כותרת
         if (currentSection) {
           currentSection.items.push(trimmed.replace(/^\*\s*/, '').trim());
-        } else {
-          // רכיב ללא כותרת
+        } else if (foundSection) {
+          // יש כותרת קודמת, אבל לא נוכחית
           ingredientsArr.push({ title: '', items: [trimmed.replace(/^\*\s*/, '').trim()] });
+        } else {
+          // אין אף כותרת משנה - רשימה רגילה
+          if (ingredientsArr.length === 0) {
+            ingredientsArr.push({ title: '', items: [] });
+          }
+          ingredientsArr[0].items.push(trimmed.replace(/^\*\s*/, '').trim());
         }
       }
     });
