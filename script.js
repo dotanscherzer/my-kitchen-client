@@ -144,43 +144,55 @@ async function generateRecipeFromIngredients() {
   const data = await res.json();
   const recipeText = data.recipe || "לא התקבל מתכון";
 
-  // --- פירוק המחרוזת ---
-  // חילוץ כותרת
+  // חילוץ שם המתכון
   let title = "מתכון שנוצר עבורך";
-  let ingredientsArr = [];
-  let instructionsArr = [];
-  let tipsArr = [];
+  const titleMatch = recipeText.match(/שם המתכון[:：]*\s*"?(.+?)"?\n/);
+  if (titleMatch) title = titleMatch[1].replace(/"/g, '').trim();
 
-  // חילוץ כותרת
-  const titleMatch = recipeText.match(/שם המתכון: (.+)/);
-  if (titleMatch) title = titleMatch[1].trim();
+  // חילוץ תיאור (לא חובה)
+  let description = "";
+  const descMatch = recipeText.match(/\*\*תיאור:\*\*\s*([\s\S]*?)\n\*\*/);
+  if (descMatch) description = descMatch[1].trim();
 
   // חילוץ רכיבים
-  const ingredientsMatch = recipeText.match(/מרכיבים:\n([\s\S]*?)\n\nהוראות הכנה:/);
+  let ingredientsArr = [];
+  const ingredientsMatch = recipeText.match(/\*\*רכיבים:\*\*[\s\S]*?((?:\*|\d+\.|-).+?)(?=\n\*\*הוראות הכנה|\n\*\*הוראות הכנה:\*\*|\n\*\*הוראות:\*\*|\n\*\*הוראות הכנה\*\*|\n\*\*הוראות\*\*|\n\n)/);
   if (ingredientsMatch) {
     ingredientsArr = ingredientsMatch[1]
-      .split("\n")
-      .map(line => line.replace(/^[-•\s]+/, "").trim())
+      .split(/\n/)
+      .map(line => line.replace(/^\*+|^-+|\d+\.|\s+/g, '').trim())
       .filter(Boolean);
   }
 
   // חילוץ הוראות
-  const instructionsMatch = recipeText.match(/הוראות הכנה:\n([\s\S]*?)(\n\n|$)/);
+  let instructionsArr = [];
+  const instructionsMatch = recipeText.match(/\*\*הוראות(?: הכנה)?[:：]*\*\*[\s\S]*?(\d+\. [\s\S]+?)(?=\n\*\*|\n\n|$)/);
   if (instructionsMatch) {
     instructionsArr = instructionsMatch[1]
       .split(/\n\d+\. /)
-      .map(line => line.replace(/^\d+\.\s*/, "").trim())
+      .map((line, i) => (i === 0 ? line : line.replace(/^\d+\.\s*/, '')).trim())
       .filter(Boolean);
   }
 
-  // חילוץ טיפים/הערות (לא חובה)
-  const tipsMatch = recipeText.match(/טיפים והערות:\n([\s\S]*)/);
+  // חילוץ טיפים/הערות
+  let tipsArr = [];
+  const tipsMatch = recipeText.match(/\*\*טיפים והערות(?: שימושיות)?[:：]*\*\*[\s\S]*?((?:\*|\d+\.|-).+?)(?=\n\*\*|\n\n|$)/);
   if (tipsMatch) {
     tipsArr = tipsMatch[1]
-      .split("\n-")
-      .map(line => line.replace(/^[-\s]+/, "").trim())
+      .split(/\n/)
+      .map(line => line.replace(/^\*+|^-+|\d+\.|\s+/g, '').trim())
       .filter(Boolean);
   }
+
+  // חילוץ זמן הכנה
+  let time = "";
+  const timeMatch = recipeText.match(/זמן הכנה משוער[:：]*\s*([^\n]+)/);
+  if (timeMatch) time = timeMatch[1].trim();
+
+  // חילוץ מספר מנות
+  let servings = "";
+  const servingsMatch = recipeText.match(/מספר מנות[:：]*\s*([^\n]+)/);
+  if (servingsMatch) servings = servingsMatch[1].trim();
 
   // הצגה בדף
   const container = document.getElementById("searchResults");
@@ -189,6 +201,7 @@ async function generateRecipeFromIngredients() {
   card.className = "recipe-card";
   card.innerHTML = `
     <h3>${title}</h3>
+    ${description ? `<div style="color:#1976d2; margin-bottom:10px;">${description}</div>` : ""}
     <b>רכיבים:</b>
     <table><tbody>
       ${ingredientsArr.map(ing => `<tr><td>${ing}</td></tr>`).join("")}
@@ -200,6 +213,8 @@ async function generateRecipeFromIngredients() {
       </ol>
     </div>
     ${tipsArr.length ? `<b>טיפים והערות:</b><ul>${tipsArr.map(tip => `<li>${tip}</li>`).join("")}</ul>` : ""}
+    ${time ? `<div><b>זמן הכנה:</b> ${time}</div>` : ""}
+    ${servings ? `<div><b>מספר מנות:</b> ${servings}</div>` : ""}
   `;
   container.appendChild(card);
 }
