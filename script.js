@@ -154,25 +154,27 @@ async function generateRecipeFromIngredients() {
   const descMatch = recipeText.match(/\*\*תיאור:\*\*\s*([\s\S]*?)\n\*\*/);
   if (descMatch) description = descMatch[1].trim();
 
-  // חילוץ רכיבים (כולל תתי-רשימות)
+  // חילוץ רכיבים (כולל תתי-רשימות, שורות ריקות, כותרות משנה)
   let ingredientsArr = [];
   const ingredientsMatch = recipeText.match(/\*\*רכיבים:\*\*([\s\S]*?)(?=\*\*הוראות|\*\*הוראות הכנה|\*\*הוראות הכנה:\*\*|\*\*הוראות:\*\*|\n\n)/);
   if (ingredientsMatch) {
-    const lines = ingredientsMatch[1].split('\n').map(l => l.trim()).filter(Boolean);
+    const lines = ingredientsMatch[1].split('\n');
     let currentSection = null;
     lines.forEach(line => {
-      // כותרת משנה (למשל: **בשר:**)
-      const sectionMatch = line.match(/^\*\*(.+?)\*\*:?$/);
+      const trimmed = line.trim();
+      if (!trimmed) return; // דלג על שורות ריקות
+      // כותרת משנה (למשל: **בקר:**)
+      const sectionMatch = trimmed.match(/^\*\*(.+?)\*\*:?$/);
       if (sectionMatch) {
         currentSection = { title: sectionMatch[1], items: [] };
         ingredientsArr.push(currentSection);
-      } else if (line.startsWith('*')) {
+      } else if (trimmed.startsWith('*')) {
         // רכיב תחת כותרת
         if (currentSection) {
-          currentSection.items.push(line.replace(/^\*\s*/, '').trim());
+          currentSection.items.push(trimmed.replace(/^\*\s*/, '').trim());
         } else {
           // רכיב ללא כותרת
-          ingredientsArr.push({ title: '', items: [line.replace(/^\*\s*/, '').trim()] });
+          ingredientsArr.push({ title: '', items: [trimmed.replace(/^\*\s*/, '').trim()] });
         }
       }
     });
