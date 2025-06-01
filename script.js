@@ -204,15 +204,42 @@ async function generateRecipeFromIngredients() {
     });
   });
 
-  // חילוץ הוראות
+  // חילוץ הוראות (כולל תתי-קבוצות, קבוצות פנימיות, ורשימות רגילות)
   let instructionsArr = [];
-  const instructionsMatch = recipeText.match(/\*\*הוראות(?: הכנה)?[:：]*\*\*[\s\S]*?(\d+\. [\s\S]+?)(?=\n\*\*|\n\n|$)/);
+  const instructionsMatch = recipeText.match(/\*\*הוראות(?: הכנה)?[:：]*\*\*([\s\S]*?)(?=\*\*(?:טיפים|הערות|ציוד|מספר מנות|זמן הכנה)[^*]*\*\*|$)/);
   if (instructionsMatch) {
-    instructionsArr = instructionsMatch[1]
-      .split(/\n\d+\. /)
-      .map((line, i) => (i === 0 ? line : line.replace(/^\d+\.\s*/, '')).trim())
-      .filter(Boolean);
+    const lines = instructionsMatch[1].split('\n');
+    let currentSection = null;
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      // פורמט: **כותרת:** (קבוצת הוראות)
+      const sectionMatch = trimmed.match(/^\*\*(.+?)\*\*:?$/);
+      if (sectionMatch) {
+        currentSection = { title: sectionMatch[1], steps: [] };
+        instructionsArr.push(currentSection);
+      } else if (trimmed) {
+        // שורה רגילה (הוראה)
+        if (currentSection) {
+          currentSection.steps.push(trimmed.replace(/^\*\s*/, '').trim());
+        } else {
+          // הוראות כלליות ללא קבוצה
+          if (instructionsArr.length === 0) {
+            instructionsArr.push({ title: '', steps: [] });
+          }
+          instructionsArr[0].steps.push(trimmed.replace(/^\*\s*/, '').trim());
+        }
+      }
+    });
   }
+
+  // הצגה מעוצבת של ההוראות
+  let instructionsHtml = '';
+  instructionsArr.forEach(section => {
+    if (section.title) {
+      instructionsHtml += `<b style="color:#1976d2;">${section.title}:</b>`;
+    }
+    instructionsHtml += `<ol style="padding-right:18px;">${section.steps.map(step => `<li>${step}</li>`).join('')}</ol>`;
+  });
 
   // חילוץ טיפים/הערות
   let tipsArr = [];
@@ -248,9 +275,7 @@ async function generateRecipeFromIngredients() {
     </tbody></table>
     <b>הוראות:</b>
     <div class="instructions">
-      <ol style="padding-right:18px;">
-        ${instructionsArr.map(step => `<li>${step}</li>`).join("")}
-      </ol>
+      ${instructionsHtml}
     </div>
     ${tipsArr.length ? `<b>טיפים והערות:</b><ul>${tipsArr.map(tip => `<li>${tip}</li>`).join("")}</ul>` : ""}
     ${time ? `<div><b>זמן הכנה:</b> ${time}</div>` : ""}
