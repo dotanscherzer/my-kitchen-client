@@ -154,7 +154,7 @@ async function generateRecipeFromIngredients() {
   const descMatch = recipeText.match(/\*\*תיאור:\*\*\s*([\s\S]*?)\n\*\*/);
   if (descMatch) description = descMatch[1].trim();
 
-  // חילוץ רכיבים (כולל תתי-רשימות, שורות ריקות, כותרות משנה, ורשימה רגילה)
+  // חילוץ רכיבים (כולל תתי-רשימות, שורות ריקות, כותרות משנה, רשימה רגילה, ושורות עם '* **כותרת:** תוכן')
   let ingredientsArr = [];
   const ingredientsMatch = recipeText.match(/\*\*רכיבים:\*\*([\s\S]*?)(?=\*\*הוראות|\*\*הוראות הכנה|\*\*הוראות הכנה:\*\*|\*\*הוראות:\*\*|\n\n)/);
   if (ingredientsMatch) {
@@ -163,13 +163,20 @@ async function generateRecipeFromIngredients() {
     let foundSection = false;
     lines.forEach(line => {
       const trimmed = line.trim();
-      // כותרת משנה (למשל: **בקר:**)
+      // פורמט: *   **כותרת:** תוכן
+      const inlineSectionMatch = trimmed.match(/^\*\s+\*\*(.+?)\*\*:(.*)$/);
+      if (inlineSectionMatch) {
+        currentSection = { title: inlineSectionMatch[1].trim(), items: [inlineSectionMatch[2].trim()] };
+        ingredientsArr.push(currentSection);
+        foundSection = true;
+        return;
+      }
+      // כותרת משנה רגילה (למשל: **בקר:**)
       const sectionMatch = trimmed.match(/^\*\*(.+?)\*\*:?$/);
       if (sectionMatch) {
         foundSection = true;
         currentSection = { title: sectionMatch[1], items: [] };
         ingredientsArr.push(currentSection);
-        // לא מאפסים currentSection גם אם יש שורות ריקות אחרי כותרת!
       } else if (trimmed.startsWith('*')) {
         if (currentSection) {
           currentSection.items.push(trimmed.replace(/^\*\s*/, '').trim());
