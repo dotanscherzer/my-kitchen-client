@@ -7,6 +7,9 @@ async function searchRecipe() {
 
   const container = document.getElementById("searchResults");
   const resultsArea = document.querySelector('.results-area');
+  const carouselContainer = document.querySelector('.recipes-carousel-container');
+  // Remove previous arrows/shadows if exist
+  Array.from(carouselContainer.querySelectorAll('.carousel-arrow, .carousel-shadow')).forEach(e => e.remove());
   container.innerHTML = "";
 
   if (!recipes || recipes.length === 0) {
@@ -69,6 +72,34 @@ async function searchRecipe() {
     list.appendChild(card);
   });
   container.appendChild(list);
+
+  // Add carousel arrows and shadows if more than 2 recipes
+  if (recipes.length > 2) {
+    // Left arrow
+    const leftArrow = document.createElement('div');
+    leftArrow.className = 'carousel-arrow left';
+    leftArrow.innerHTML = '&#8592;';
+    leftArrow.onclick = () => {
+      list.scrollBy({ left: -360, behavior: 'smooth' });
+    };
+    // Right arrow
+    const rightArrow = document.createElement('div');
+    rightArrow.className = 'carousel-arrow right';
+    rightArrow.innerHTML = '&#8594;';
+    rightArrow.onclick = () => {
+      list.scrollBy({ left: 360, behavior: 'smooth' });
+    };
+    // Shadows
+    const leftShadow = document.createElement('div');
+    leftShadow.className = 'carousel-shadow left';
+    const rightShadow = document.createElement('div');
+    rightShadow.className = 'carousel-shadow right';
+    // Add to carousel container
+    carouselContainer.appendChild(leftArrow);
+    carouselContainer.appendChild(rightArrow);
+    carouselContainer.appendChild(leftShadow);
+    carouselContainer.appendChild(rightShadow);
+  }
 }
 
 async function addRecipe() {

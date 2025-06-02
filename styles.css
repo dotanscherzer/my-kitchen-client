@@ -93,6 +93,8 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
 }
 .recipe-card {
   flex: 0 0 340px;
+  min-width: 320px;
+  max-width: 340px;
   scroll-snap-align: start;
 }
 .recipes-list::-webkit-scrollbar {
@@ -101,4 +103,49 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
 .recipes-list::-webkit-scrollbar-thumb {
   background: #b2dfdb;
   border-radius: 8px;
+}
+
+.recipes-carousel-container {
+  position: relative;
+  width: 720px;
+  max-width: 95vw;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px #b2dfdb;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 2rem;
+  color: #1976d2;
+  opacity: 0.85;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
+}
+.carousel-arrow.left { right: 100%; margin-right: 8px; }
+.carousel-arrow.right { left: 100%; margin-left: 8px; }
+.carousel-arrow:active { background: #e0f7fa; color: #1565c0; }
+.carousel-shadow {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  z-index: 1;
+}
+.carousel-shadow.left { right: 0; background: linear-gradient(to left, transparent, #e0f7fa 80%); }
+.carousel-shadow.right { left: 0; background: linear-gradient(to right, transparent, #e0f7fa 80%); }
+
+@media (max-width: 800px) {
+  .recipes-carousel-container { width: 98vw; max-width: 98vw; }
+  .recipe-card { flex: 0 0 90vw; min-width: 90vw; max-width: 95vw; }
 }
