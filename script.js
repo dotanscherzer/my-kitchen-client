@@ -6,12 +6,14 @@ async function searchRecipe() {
   const recipes = await res.json();
 
   const container = document.getElementById("searchResults");
+  const resultsArea = document.querySelector('.results-area');
   container.innerHTML = "";
 
   if (!recipes || recipes.length === 0) {
-    // No results: leave the area empty (no box)
+    if (resultsArea) resultsArea.classList.remove('has-results');
     return;
   }
+  if (resultsArea) resultsArea.classList.add('has-results');
 
   const list = document.createElement("div");
   list.className = "recipes-list";
@@ -31,15 +33,14 @@ async function searchRecipe() {
       <div class="instructions">${recipe.instructions}</div>
     `;
 
+    // Actions row (flex)
+    const actionsRow = document.createElement("div");
+    actionsRow.className = "actions-row";
+
     const enhanceBtn = document.createElement("button");
     enhanceBtn.innerText = "שדרג עם AI";
     enhanceBtn.onclick = () => enhanceRecipe(recipe);
     enhanceBtn.className = "enhance-btn";
-
-    const favBtn = document.createElement("button");
-    favBtn.innerText = "הוסף למועדפים";
-    favBtn.onclick = () => saveFavoriteForRecipe(recipe._id || recipe.recipeId);
-    favBtn.className = "favorite-btn";
 
     const favEmailInput = document.createElement("input");
     favEmailInput.type = "text";
@@ -49,14 +50,21 @@ async function searchRecipe() {
     const savedEmail = localStorage.getItem("favEmail");
     if (savedEmail) favEmailInput.value = savedEmail;
 
+    const favBtn = document.createElement("button");
+    favBtn.innerText = "הוסף למועדפים";
+    favBtn.onclick = () => saveFavoriteForRecipe(recipe._id || recipe.recipeId);
+    favBtn.className = "favorite-btn";
+
+    actionsRow.appendChild(enhanceBtn);
+    actionsRow.appendChild(favEmailInput);
+    actionsRow.appendChild(favBtn);
+
     const suggestionDiv = document.createElement("div");
     suggestionDiv.id = `suggestion-${recipe._id || recipe.recipeId}`;
     suggestionDiv.style.marginTop = "10px";
     suggestionDiv.style.color = "green";
 
-    card.appendChild(enhanceBtn);
-    card.appendChild(favEmailInput);
-    card.appendChild(favBtn);
+    card.appendChild(actionsRow);
     card.appendChild(suggestionDiv);
     list.appendChild(card);
   });
