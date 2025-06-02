@@ -80,6 +80,7 @@ async function searchRecipe() {
     showMoreBtn.onclick = (e) => {
       e.stopPropagation();
       card.classList.toggle("expanded");
+      showMoreBtn.innerText = card.classList.contains("expanded") ? "הסתר" : "הצג עוד";
     };
     card.appendChild(showMoreBtn);
 
