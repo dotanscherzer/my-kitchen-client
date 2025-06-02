@@ -8,6 +8,11 @@ async function searchRecipe() {
   const container = document.getElementById("searchResults");
   container.innerHTML = "";
 
+  if (!recipes || recipes.length === 0) {
+    // No results: leave the area empty (no box)
+    return;
+  }
+
   const list = document.createElement("div");
   list.className = "recipes-list";
 

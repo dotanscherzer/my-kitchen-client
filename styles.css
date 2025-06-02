@@ -56,7 +56,7 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
 .favorite-btn { background: linear-gradient(90deg, #fff176 0%, #ffd54f 100%); color: #a67c00; border: 1px solid #ffe082; border-radius: 8px; margin-left: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s, color 0.2s; }
 .favorite-btn:hover { background: linear-gradient(90deg, #ffd54f 0%, #fff176 100%); color: #ff6f00; }
 
-.fav-email { width: 180px; padding: 8px; font-size: 0.9rem; border: 1px solid #bdbdbd; border-radius: 4px; margin-left: 8px; }
+.fav-email { width: 120px; max-width: 50%; padding: 6px; font-size: 0.95rem; border: 1px solid #bdbdbd; border-radius: 4px; margin-left: 8px; margin-bottom: 6px; box-sizing: border-box; display: inline-block; vertical-align: middle; }
 
 /* Modern enhance button */
 .enhance-btn { background: linear-gradient(90deg, #b3e5fc 0%, #81d4fa 100%); color: #1565c0; border: 1px solid #90caf9; border-radius: 8px; margin-left: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s, color 0.2s; }
