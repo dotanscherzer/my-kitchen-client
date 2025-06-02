@@ -40,8 +40,44 @@ button { padding: 12px 26px; font-size: 1.1rem; margin: 8px 6px; border-radius: 
 button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); color: #0d3c1e; box-shadow: 0 4px 16px #80cbc4; }
 
 /* Modern recipe card */
-.recipe-card { background: #fff; border: 1.5px solid #b2dfdb; border-radius: 18px; box-shadow: 0 4px 24px #b2dfdb99; padding: 32px 24px 24px 24px; width: 400px; text-align: right; margin-bottom: 18px; transition: box-shadow 0.2s, border 0.2s; position: relative; overflow: hidden; }
+.recipe-card {
+  background: #fff;
+  border: 1.5px solid #b2dfdb;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #b2dfdb99;
+  padding: 32px 24px 24px 24px;
+  width: 400px;
+  text-align: right;
+  margin-bottom: 18px;
+  transition: max-height 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+  max-height: 120px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
 .recipe-card:hover { box-shadow: 0 8px 32px #26a69a99; border: 2px solid #26a69a; }
+.recipe-card.expanded {
+  max-height: 2000px; /* מספיק גבוה לכל תוכן */
+  box-shadow: 0 8px 32px #26a69a99;
+  cursor: default;
+}
+.show-more-btn {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e0f7fa;
+  color: #1976d2;
+  border: none;
+  border-radius: 16px;
+  padding: 4px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 8px #b2dfdb;
+  transition: background 0.2s, color 0.2s;
+}
+.recipe-card.expanded .show-more-btn { display: none; }
 
 .recipe-card h3 { margin-top: 0; color: #00897b; font-size: 1.6rem; margin-bottom: 10px; }
 

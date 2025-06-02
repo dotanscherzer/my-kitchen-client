@@ -24,6 +24,9 @@ async function searchRecipe() {
   recipes.forEach((recipe) => {
     const card = document.createElement("div");
     card.className = "recipe-card";
+    // collapsed by default
+    // card.classList.add('collapsed');
+
     card.innerHTML = `
       <h3>${recipe.title}</h3>
       <b>רכיבים:</b>
@@ -69,6 +72,17 @@ async function searchRecipe() {
 
     card.appendChild(actionsRow);
     card.appendChild(suggestionDiv);
+
+    // Add show more button
+    const showMoreBtn = document.createElement("button");
+    showMoreBtn.className = "show-more-btn";
+    showMoreBtn.innerText = "הצג עוד";
+    showMoreBtn.onclick = (e) => {
+      e.stopPropagation();
+      card.classList.toggle("expanded");
+    };
+    card.appendChild(showMoreBtn);
+
     list.appendChild(card);
   });
   container.appendChild(list);
