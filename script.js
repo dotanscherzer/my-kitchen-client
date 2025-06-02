@@ -36,12 +36,21 @@ async function searchRecipe() {
     favBtn.onclick = () => saveFavoriteForRecipe(recipe._id || recipe.recipeId);
     favBtn.className = "favorite-btn";
 
+    const favEmailInput = document.createElement("input");
+    favEmailInput.type = "text";
+    favEmailInput.id = "favEmail" + (recipe._id || recipe.recipeId);
+    favEmailInput.className = "fav-email";
+    favEmailInput.placeholder = "הזן אימייל למועדפים";
+    const savedEmail = localStorage.getItem("favEmail");
+    if (savedEmail) favEmailInput.value = savedEmail;
+
     const suggestionDiv = document.createElement("div");
     suggestionDiv.id = `suggestion-${recipe._id || recipe.recipeId}`;
     suggestionDiv.style.marginTop = "10px";
     suggestionDiv.style.color = "green";
 
     card.appendChild(enhanceBtn);
+    card.appendChild(favEmailInput);
     card.appendChild(favBtn);
     card.appendChild(suggestionDiv);
     list.appendChild(card);
@@ -70,11 +79,13 @@ async function addRecipe() {
 }
 
 async function saveFavoriteForRecipe(recipeId) {
-  const email = document.getElementById("emailInput").value;
-  if (!email || !recipeId) {
-    alert("אנא הזן אימייל וודא שיש תוצאה לחיפוש");
+  const favEmailInput = document.getElementById("favEmail" + recipeId);
+  let email = (favEmailInput && favEmailInput.value) ? favEmailInput.value : localStorage.getItem("favEmail");
+  if (!email) {
+    alert("אנא הזן אימייל (בשדה ליד כפתור 'הוסף למועדפים')");
     return;
   }
+  localStorage.setItem("favEmail", email);
   const res = await fetch(`${apiBase}/saveFavorite`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -87,12 +98,12 @@ async function saveFavoriteForRecipe(recipeId) {
   }
 }
 
-function saveFavorite() {
-  alert("השתמש בכפתור 'הוסף למועדפים' ליד כל מתכון.");
-}
-
 async function loadFavorites() {
-  const email = document.getElementById("emailInput").value;
+  const email = document.getElementById("favEmail").value;
+  if (!email) {
+    alert("אנא הזן אימייל באזור המועדפים");
+    return;
+  }
   const res = await fetch(`${apiBase}/getFavorites?email=${email}`);
   const favorites = await res.json();
 

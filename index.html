@@ -7,27 +7,43 @@
 </head>
 <body style="direction: rtl; text-align: center; font-family: sans-serif;">
 
-  <h1>המטבח האישי שלי</h1>
+  <header>
+    <h1>המטבח האישי שלי</h1>
+  </header>
 
-  <h2>חפש מתכונים</h2>
-  <input type="text" id="searchInput" placeholder="עוף">
-  <input type="text" id="emailInput" placeholder="example@email.com">
-  <button onclick="searchRecipe()">חפש</button>
-  <button onclick="loadFavorites()">טען מועדפים</button>
-  <br><br>
-  <input type="text" id="myIngredientsInput" placeholder="רשום רכיבים מופרדים בפסיקים">
-  <button onclick="generateRecipeFromIngredients()">צור מתכון ממה שיש בבית</button>
+  <main>
+    <section class="search-area">
+      <h2>חפש מתכונים</h2>
+      <input type="text" id="searchInput" placeholder="עוף" />
+      <button onclick="searchRecipe()">חפש</button>
+      <br /><br />
+      <input type="text" id="myIngredientsInput" placeholder="רשום רכיבים מופרדים בפסיקים" />
+      <button onclick="generateRecipeFromIngredients()">צור מתכון ממה שיש בבית</button>
+    </section>
 
-  <div id="searchResults" style="margin: 20px;"></div>
+    <section class="results-area">
+      <div id="searchResults" style="margin: 20px;"></div>
+    </section>
 
-  <h2>הוסף מתכון חדש</h2>
-  <input type="text" id="newTitle" placeholder="שם מתכון"><br><br>
-  <textarea id="newIngredients" rows="2" cols="40" placeholder="רכיבים (מופרדים בפסיקים)"></textarea><br><br>
-  <textarea id="newInstructions" rows="2" cols="40" placeholder="הוראות הכנה"></textarea><br><br>
-  <button onclick="addRecipe()">הוסף</button>
+    <section class="add-area">
+      <h2>הוסף מתכון חדש</h2>
+      <input type="text" id="newTitle" placeholder="שם מתכון" /><br /><br />
+      <textarea id="newIngredients" rows="2" cols="40" placeholder="רכיבים (מופרדים בפסיקים)"></textarea><br /><br />
+      <textarea id="newInstructions" rows="2" cols="40" placeholder="הוראות הכנה"></textarea><br /><br />
+      <button onclick="addRecipe()">הוסף</button>
+    </section>
+  </main>
 
-  <h2>מועדפים:</h2>
-  <div id="favorites"></div>
+  <aside class="favorites-area">
+    <h2>מועדפים:</h2>
+    <input type="text" id="favEmail" placeholder="הזן אימייל למועדפים" />
+    <button onclick="loadFavorites()">טען מועדפים</button>
+    <div id="favorites"></div>
+  </aside>
+
+  <footer>
+    <p>© המטבח האישי שלי</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
