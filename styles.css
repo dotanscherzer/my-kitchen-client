@@ -127,8 +127,8 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
   transition: background 0.2s, color 0.2s;
   user-select: none;
 }
-.carousel-arrow.left { right: 8px; }
-.carousel-arrow.right { left: 8px; }
+.carousel-arrow.left { left: 8px; right: auto; }
+.carousel-arrow.right { right: 8px; left: auto; }
 .carousel-arrow:active { background: #e0f7fa; color: #1565c0; }
 .carousel-shadow {
   display: none; /* אפשר להחזיר אם רוצים */
@@ -137,6 +137,6 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
   .recipes-carousel-container { width: 100vw; max-width: 100vw; padding: 0 24px; }
   .recipe-card { flex: 0 0 90vw; min-width: 90vw; max-width: 95vw; }
   .carousel-arrow { width: 32px; height: 32px; font-size: 1.5rem; }
-  .carousel-arrow.left { right: 2px; }
-  .carousel-arrow.right { left: 2px; }
+  .carousel-arrow.left { left: 2px; right: auto; }
+  .carousel-arrow.right { right: 2px; left: auto; }
 }
