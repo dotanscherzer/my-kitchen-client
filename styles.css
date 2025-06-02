@@ -58,10 +58,9 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
 
 .results-area:not(.has-results) { display: none !important; }
 
-.recipe-card .actions-row { display: flex; flex-direction: row; align-items: center; gap: 8px; margin-top: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+.recipe-card .actions-row { display: flex; flex-direction: row; align-items: center; gap: 8px; margin-top: 8px; margin-bottom: 4px; flex-wrap: wrap; width: 100%; }
 .recipe-card .actions-row > * { flex: 1 1 0; min-width: 0; }
-
-.fav-email { flex: 2 1 0; min-width: 0; width: auto; max-width: 100%; padding: 6px; font-size: 0.95rem; border: 1px solid #bdbdbd; border-radius: 4px; box-sizing: border-box; display: inline-block; vertical-align: middle; }
+.fav-email { flex: 2 1 0; min-width: 0; width: 140px; max-width: 100%; padding: 6px; font-size: 0.95rem; border: 1px solid #bdbdbd; border-radius: 4px; box-sizing: border-box; display: inline-block; vertical-align: middle; }
 
 /* Modern enhance button */
 .enhance-btn { background: linear-gradient(90deg, #b3e5fc 0%, #81d4fa 100%); color: #1565c0; border: 1px solid #90caf9; border-radius: 8px; margin-left: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s, color 0.2s; }
@@ -75,4 +74,6 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
   .recipes-list, #favorites { flex-direction: column; align-items: center; }
   .recipe-card { width: 95vw; min-width: 0; padding: 18px 6vw; }
   input[type="text"], textarea { width: 90vw; }
+  .fav-email { width: 100% !important; max-width: 100% !important; margin-top: 6px; }
+  .recipe-card .actions-row { flex-direction: column; align-items: stretch; gap: 6px; }
 }
