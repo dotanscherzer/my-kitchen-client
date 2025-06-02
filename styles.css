@@ -77,7 +77,7 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
   box-shadow: 0 2px 8px #b2dfdb;
   transition: background 0.2s, color 0.2s;
 }
-.recipe-card.expanded .show-more-btn { display: none; }
+.recipe-card.expanded .show-more-btn { display: block; }
 
 .recipe-card h3 { margin-top: 0; color: #00897b; font-size: 1.6rem; margin-bottom: 10px; }
 
