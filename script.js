@@ -351,5 +351,15 @@ async function generateRecipeFromIngredients() {
     ${time ? `<div><b>זמן הכנה:</b> ${time}</div>` : ""}
     ${servings ? `<div><b>מספר מנות:</b> ${servings}</div>` : ""}
   `;
+  // Add show more button
+  const showMoreBtn = document.createElement("button");
+  showMoreBtn.className = "show-more-btn";
+  showMoreBtn.innerText = "הצג עוד";
+  showMoreBtn.onclick = (e) => {
+    e.stopPropagation();
+    card.classList.toggle("expanded");
+    showMoreBtn.innerText = card.classList.contains("expanded") ? "הסתר" : "הצג עוד";
+  };
+  card.appendChild(showMoreBtn);
   container.appendChild(card);
 }
