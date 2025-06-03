@@ -57,7 +57,7 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
 }
 .recipe-card:hover { box-shadow: 0 8px 32px #26a69a99; border: 2px solid #26a69a; }
 .recipe-card.expanded {
-  max-height: 2000px; /* מספיק גבוה לכל תוכן */
+  max-height: none;
   box-shadow: 0 8px 32px #26a69a99;
   cursor: default;
 }
