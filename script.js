@@ -333,10 +333,18 @@ async function generateRecipeFromIngredients() {
 
   // הצגה בדף
   const container = document.getElementById("searchResults");
+  const resultsArea = document.querySelector('.results-area');
+  const carouselContainer = document.querySelector('.recipes-carousel-container');
+  // Make sure area is visible
+  if (resultsArea) resultsArea.classList.add('has-results');
+  // Remove previous arrows/shadows if exist
+  if (carouselContainer) Array.from(carouselContainer.querySelectorAll('.carousel-arrow, .carousel-shadow')).forEach(e => e.remove());
   container.innerHTML = "";
+  // Create recipes-list wrapper for consistency
+  const list = document.createElement("div");
+  list.className = "recipes-list";
   const card = document.createElement("div");
   card.className = "recipe-card";
-  // Make sure card is collapsed by default
   card.classList.remove("expanded");
   card.innerHTML = `
     <h3>${title}</h3>
@@ -363,5 +371,31 @@ async function generateRecipeFromIngredients() {
     showMoreBtn.innerText = card.classList.contains("expanded") ? "הסתר" : "הצג עוד";
   };
   card.appendChild(showMoreBtn);
-  container.appendChild(card);
+  list.appendChild(card);
+  container.appendChild(list);
+  // Add carousel arrows and shadows (like in searchRecipe)
+  if (carouselContainer) {
+    if (carouselContainer.querySelectorAll('.recipes-list .recipe-card').length > 2) {
+      const leftArrow = document.createElement('div');
+      leftArrow.className = 'carousel-arrow left';
+      leftArrow.innerHTML = '&#8592;';
+      leftArrow.onclick = () => {
+        list.scrollBy({ left: -360, behavior: 'smooth' });
+      };
+      const rightArrow = document.createElement('div');
+      rightArrow.className = 'carousel-arrow right';
+      rightArrow.innerHTML = '&#8594;';
+      rightArrow.onclick = () => {
+        list.scrollBy({ left: 360, behavior: 'smooth' });
+      };
+      const leftShadow = document.createElement('div');
+      leftShadow.className = 'carousel-shadow left';
+      const rightShadow = document.createElement('div');
+      rightShadow.className = 'carousel-shadow right';
+      carouselContainer.appendChild(leftArrow);
+      carouselContainer.appendChild(rightArrow);
+      carouselContainer.appendChild(leftShadow);
+      carouselContainer.appendChild(rightShadow);
+    }
+  }
 }
