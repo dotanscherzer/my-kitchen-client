@@ -336,15 +336,17 @@ async function generateRecipeFromIngredients() {
   container.innerHTML = "";
   const card = document.createElement("div");
   card.className = "recipe-card";
+  // Make sure card is collapsed by default
+  card.classList.remove("expanded");
   card.innerHTML = `
     <h3>${title}</h3>
-    ${description ? `<div style="color:#1976d2; margin-bottom:10px;">${description}</div>` : ""}
+    ${description ? `<div style=\"color:#1976d2; margin-bottom:10px;\">${description}</div>` : ""}
     <b>רכיבים:</b>
     <table><tbody>
       ${ingredientsTable}
     </tbody></table>
     <b>הוראות:</b>
-    <div class="instructions">
+    <div class=\"instructions\">
       ${instructionsHtml}
     </div>
     ${tipsArr.length ? `<b>טיפים והערות:</b><ul>${tipsArr.map(tip => `<li>${tip}</li>`).join("")}</ul>` : ""}
