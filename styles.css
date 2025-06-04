@@ -1,9 +1,10 @@
 /* Modern, responsive layout using grid */
 body {
+  background: #f5f6f7;
   font-family: 'Segoe UI', 'Arial', sans-serif;
+  color: #222;
   direction: rtl;
   text-align: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #e0f7fa 100%);
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -24,61 +25,90 @@ footer { grid-area: footer; }
 }
 
 /* Modern header */
-h1 { color: #2e7d32; font-size: 3rem; margin-top: 32px; margin-bottom: 10px; letter-spacing: 2px; text-shadow: 0 2px 8px #b2dfdb; }
+h1, h2 {
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #1c2d5a;
+  margin-bottom: 24px;
+}
 
-h2 { color: #1565c0; margin-bottom: 18px; margin-top: 36px; font-size: 2rem; }
+h1 {
+  font-size: 2.8rem;
+  margin-top: 40px;
+}
+
+h2 {
+  font-size: 1.6rem;
+}
 
 /* Modern search, add, and favorites areas */
-.search-area, .add-area, .favorites-area, .results-area { margin: 20px; padding: 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.8); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+section, .results-area, .search-area, .add-area, .favorites-area {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #e0e5ec55;
+  margin: 32px auto;
+  padding: 32px 24px;
+  max-width: 700px;
+}
 
 /* Modern input and textarea */
-input[type="text"], textarea { padding: 12px; width: 320px; font-size: 1.1rem; border: 1px solid #bdbdbd; border-radius: 8px; margin: 6px 0; background: #f9fbe7; transition: border 0.2s; }
-input[type="text"]:focus, textarea:focus { border: 1.5px solid #1976d2; outline: none; }
+input[type="text"], textarea {
+  border: 1.5px solid #b2bec3;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 1.1rem;
+  background: #f5f6f7;
+  margin: 8px 0;
+  transition: border 0.2s;
+}
+input[type="text"]:focus, textarea:focus {
+  border: 2px solid #1c2d5a;
+  outline: none;
+}
 
 /* Modern button */
-button { padding: 12px 26px; font-size: 1.1rem; margin: 8px 6px; border-radius: 8px; border: none; background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%); color: #1b5e20; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px #b2dfdb; transition: background 0.2s, box-shadow 0.2s, color 0.2s; }
-button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); color: #0d3c1e; box-shadow: 0 4px 16px #80cbc4; }
+button, .show-more-btn {
+  background: #fff;
+  color: #1c2d5a;
+  border: 2px solid #1c2d5a;
+  border-radius: 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 12px 32px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  box-shadow: 0 2px 8px #e0e5ec55;
+}
+button:hover, .show-more-btn:hover {
+  background: #1c2d5a;
+  color: #fff;
+  border-color: #1c2d5a;
+}
 
 /* Modern recipe card */
 .recipe-card {
   background: #fff;
-  border: 1.5px solid #b2dfdb;
   border-radius: 18px;
-  box-shadow: 0 4px 24px #b2dfdb99;
-  padding: 32px 24px 24px 24px;
-  width: 400px;
-  text-align: right;
-  margin-bottom: 18px;
-  transition: max-height 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.2s;
+  box-shadow: 0 2px 16px #b2bec3aa;
+  border: 1.5px solid #e0e5ec;
+  margin: 0 12px;
+  padding: 28px 20px 20px 20px;
+  transition: box-shadow 0.2s, border 0.2s, max-height 0.4s cubic-bezier(.4,0,.2,1);
   max-height: 120px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
 }
-.recipe-card:hover { box-shadow: 0 8px 32px #26a69a99; border: 2px solid #26a69a; }
+.recipe-card:hover {
+  box-shadow: 0 8px 32px #1c2d5a33;
+  border: 2px solid #1c2d5a;
+}
 .recipe-card.expanded {
   max-height: none;
   box-shadow: 0 8px 32px #26a69a99;
   cursor: default;
 }
-.show-more-btn {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #e0f7fa;
-  color: #1976d2;
-  border: none;
-  border-radius: 16px;
-  padding: 4px 18px;
-  font-size: 1rem;
-  cursor: pointer;
-  z-index: 2;
-  box-shadow: 0 2px 8px #b2dfdb;
-  transition: background 0.2s, color 0.2s;
-}
-.recipe-card.expanded .show-more-btn { display: block; }
-
 .recipe-card h3 { margin-top: 0; color: #00897b; font-size: 1.6rem; margin-bottom: 10px; }
 
 .recipe-card table { width: 100%; border-collapse: collapse; margin-bottom: 12px; background: #f1f8e9; border-radius: 8px; overflow: hidden; }
@@ -161,24 +191,19 @@ button:hover { background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%); col
   padding: 0 48px; /* room for arrows */
 }
 .carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
   background: #fff;
+  color: #1c2d5a;
+  border: 2px solid #1c2d5a;
+  box-shadow: 0 2px 8px #e0e5ec55;
   border-radius: 50%;
-  box-shadow: 0 2px 8px #b2dfdb;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  width: 44px;
+  height: 44px;
   font-size: 2rem;
-  color: #1976d2;
-  opacity: 0.85;
   transition: background 0.2s, color 0.2s;
-  user-select: none;
+}
+.carousel-arrow:hover {
+  background: #1c2d5a;
+  color: #fff;
 }
 .carousel-arrow.left { left: 8px; right: auto; }
 .carousel-arrow.right { right: 8px; left: auto; }
