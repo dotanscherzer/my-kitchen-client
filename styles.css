@@ -218,3 +218,5 @@ button:hover, .show-more-btn:hover {
   .carousel-arrow.left { left: 2px; right: auto; }
   .carousel-arrow.right { right: 2px; left: auto; }
 }
+
+.show-more-btn { display: block !important; position: static; margin: 16px auto 0 auto; }
