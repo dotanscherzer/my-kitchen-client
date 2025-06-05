@@ -420,11 +420,13 @@ async function importRecipeToForm() {
     });
     if (!res.ok) throw new Error("שגיאה בייבוא מתכון");
     const data = await res.json();
-    if (!data.recipe) throw new Error("לא נמצא מתכון בכתובת זו");
-    // נניח ש-data.recipe כולל title, ingredients, instructions
-    document.getElementById("newTitle").value = data.recipe.title || "";
-    document.getElementById("newIngredients").value = (data.recipe.ingredients || []).join(",");
-    document.getElementById("newInstructions").value = data.recipe.instructions || "";
+    const recipe = data.recipe || data;
+    if (!recipe.title || !recipe.ingredients || !recipe.instructions) {
+      throw new Error("לא נמצא מתכון בכתובת זו");
+    }
+    document.getElementById("newTitle").value = recipe.title || "";
+    document.getElementById("newIngredients").value = (recipe.ingredients || []).join(",");
+    document.getElementById("newInstructions").value = recipe.instructions || "";
     status.innerText = "המתכון יובא בהצלחה! ניתן לערוך ולשמור.";
     status.style.color = "#1c2d5a";
   } catch (err) {
