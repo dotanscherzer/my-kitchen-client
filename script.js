@@ -425,7 +425,23 @@ async function importRecipeToForm() {
       throw new Error("לא נמצא מתכון בכתובת זו");
     }
     document.getElementById("newTitle").value = recipe.title || "";
-    document.getElementById("newIngredients").value = (recipe.ingredients || []).join(",");
+    // Handle ingredients as array of sections or flat array
+    let ingredientsStr = "";
+    if (Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0) {
+      if (typeof recipe.ingredients[0] === "object" && recipe.ingredients[0].items) {
+        // Sectioned format
+        ingredientsStr = recipe.ingredients
+          .map(section =>
+            (section.section ? section.section + ":\n" : "") +
+            section.items.map(item => "- " + item).join("\n")
+          )
+          .join("\n");
+      } else {
+        // Flat array
+        ingredientsStr = recipe.ingredients.join(", ");
+      }
+    }
+    document.getElementById("newIngredients").value = ingredientsStr;
     document.getElementById("newInstructions").value = recipe.instructions || "";
     status.innerText = "המתכון יובא בהצלחה! ניתן לערוך ולשמור.";
     status.style.color = "#1c2d5a";
