@@ -401,3 +401,34 @@ async function generateRecipeFromIngredients() {
     }
   }
 }
+
+async function importRecipeToForm() {
+  const url = document.getElementById("importUrlInput").value.trim();
+  const status = document.getElementById("importStatus");
+  if (!url) {
+    status.innerText = "אנא הדבק כתובת אתר";
+    status.style.color = "#c00";
+    return;
+  }
+  status.innerText = "מייבא מתכון...";
+  status.style.color = "#1c2d5a";
+  try {
+    const res = await fetch(`${apiBase}/importRecipeFromUrl`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+    if (!res.ok) throw new Error("שגיאה בייבוא מתכון");
+    const data = await res.json();
+    if (!data.recipe) throw new Error("לא נמצא מתכון בכתובת זו");
+    // נניח ש-data.recipe כולל title, ingredients, instructions
+    document.getElementById("newTitle").value = data.recipe.title || "";
+    document.getElementById("newIngredients").value = (data.recipe.ingredients || []).join(",");
+    document.getElementById("newInstructions").value = data.recipe.instructions || "";
+    status.innerText = "המתכון יובא בהצלחה! ניתן לערוך ולשמור.";
+    status.style.color = "#1c2d5a";
+  } catch (err) {
+    status.innerText = err.message || "שגיאה לא ידועה";
+    status.style.color = "#c00";
+  }
+}

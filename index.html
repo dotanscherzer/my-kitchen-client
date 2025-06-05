@@ -33,6 +33,13 @@
       <input type="text" id="newTitle" placeholder="שם מתכון" /><br /><br />
       <textarea id="newIngredients" rows="2" cols="40" placeholder="רכיבים (מופרדים בפסיקים)"></textarea><br /><br />
       <textarea id="newInstructions" rows="2" cols="40" placeholder="הוראות הכנה"></textarea><br /><br />
+      <div class="import-inline">
+        <hr>
+        <label for="importUrlInput" style="font-weight:bold;">או ייבא מתכון מאתר:</label>
+        <input type="text" id="importUrlInput" placeholder="הדבק כתובת אתר מתכון" />
+        <button onclick="importRecipeToForm()">ייבא</button>
+        <span id="importStatus" style="display:block; color:#1c2d5a; margin-top:6px;"></span>
+      </div>
       <button onclick="addRecipe()">הוסף</button>
     </section>
   </main>
