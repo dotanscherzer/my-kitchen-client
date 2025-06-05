@@ -99,6 +99,7 @@ button:hover, .show-more-btn:hover {
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  padding-bottom: 56px;
 }
 .recipe-card:hover {
   box-shadow: 0 8px 32px #1c2d5a33;
@@ -219,4 +220,4 @@ button:hover, .show-more-btn:hover {
   .carousel-arrow.right { right: 2px; left: auto; }
 }
 
-.show-more-btn { display: block !important; position: static; margin: 16px auto 0 auto; }
+.show-more-btn { display: block !important; position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; margin: 0; z-index: 2; }
