@@ -76,7 +76,7 @@ async function searchRecipe() {
     // Add show more button
     const showMoreBtn = document.createElement("button");
     showMoreBtn.className = "show-more-btn";
-    showMoreBtn.innerText = "הצג עוד";
+    showMoreBtn.innerText = card.classList.contains("expanded") ? "הסתר" : "הצג עוד";
     showMoreBtn.style.display = "block";
     showMoreBtn.onclick = (e) => {
       e.stopPropagation();
@@ -365,7 +365,7 @@ async function generateRecipeFromIngredients() {
   // Add show more button
   const showMoreBtn = document.createElement("button");
   showMoreBtn.className = "show-more-btn";
-  showMoreBtn.innerText = "הצג עוד";
+  showMoreBtn.innerText = card.classList.contains("expanded") ? "הסתר" : "הצג עוד";
   showMoreBtn.style.display = "block";
   showMoreBtn.onclick = (e) => {
     e.stopPropagation();
