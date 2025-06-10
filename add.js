@@ -1,4 +1,6 @@
 // add.js
+const apiBase = "https://my-kitchen-server.onrender.com";
+
 (function() {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -24,7 +26,7 @@
       const ingredients = document.getElementById('newIngredients').value.split('\n').map(x => x.trim()).filter(Boolean);
       const instructions = document.getElementById('newInstructions').value.trim();
       try {
-        const res = await fetch('/addRecipe', {
+        const res = await fetch(apiBase + '/addRecipe', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +66,7 @@
       importStatus.innerText = 'מייבא מתכון...';
       importStatus.style.color = '#1c2d5a';
       try {
-        const res = await fetch('/importRecipeFromUrl', {
+        const res = await fetch(apiBase + '/importRecipeFromUrl', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

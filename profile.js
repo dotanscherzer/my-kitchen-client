@@ -1,4 +1,6 @@
 // profile.js
+const apiBase = "https://my-kitchen-server.onrender.com";
+
 (async function() {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -8,7 +10,7 @@
   let name = localStorage.getItem('userName') || '';
   let email = localStorage.getItem('userEmail') || '';
   try {
-    const res = await fetch('/profile', {
+    const res = await fetch(apiBase + '/profile', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token

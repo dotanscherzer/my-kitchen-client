@@ -3,6 +3,7 @@
   const token = localStorage.getItem('token');
   const userName = localStorage.getItem('userName') || '';
   const resultsBox = document.getElementById('searchResultsBox');
+  const apiBase = "https://my-kitchen-server.onrender.com";
 
   // חיפוש מתכונים
   const searchForm = document.getElementById('searchForm');
@@ -13,7 +14,7 @@
       if (!q) return;
       resultsBox.innerHTML = '<div style="color:#1c2d5a;">טוען תוצאות...</div>';
       try {
-        const res = await fetch('/search?q=' + encodeURIComponent(q));
+        const res = await fetch(apiBase + '/search?q=' + encodeURIComponent(q));
         const data = await res.json();
         if (!Array.isArray(data) || data.length === 0) {
           resultsBox.innerHTML = '<div style="color:#c00;">לא נמצאו מתכונים.</div>';
@@ -35,7 +36,7 @@
       if (!ingredients) return;
       resultsBox.innerHTML = '<div style="color:#1c2d5a;">יוצר מתכון...</div>';
       try {
-        const res = await fetch('/generateRecipe', {
+        const res = await fetch(apiBase + '/generateRecipe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ingredients: ingredients.split(',').map(x => x.trim()).filter(Boolean) })
@@ -85,7 +86,7 @@
         statusDiv.innerText = 'מוסיף...';
         statusDiv.style.color = '#1c2d5a';
         try {
-          const res = await fetch('/saveFavorite', {
+          const res = await fetch(apiBase + '/saveFavorite', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

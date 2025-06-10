@@ -1,4 +1,6 @@
 // favorites.js
+const apiBase = "https://my-kitchen-server.onrender.com";
+
 (async function() {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -9,7 +11,7 @@
   const box = document.getElementById('favoritesBox');
   box.innerHTML = '<div style="color:#1c2d5a; font-size:1.2rem; margin-bottom:18px;">טוען מועדפים...</div>';
   try {
-    const res = await fetch('/getFavorites', {
+    const res = await fetch(apiBase + '/getFavorites', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token
@@ -50,7 +52,7 @@
         statusDiv.innerText = 'מסיר...';
         statusDiv.style.color = '#1c2d5a';
         try {
-          const res = await fetch('/removeFavorite', {
+          const res = await fetch(apiBase + '/removeFavorite', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 // login.js
-const apiBase = ""; // השאר ריק אם ה-API על אותו דומיין, אחרת כתוב כאן את כתובת השרת
+const apiBase = "https://my-kitchen-server.onrender.com";
 
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
