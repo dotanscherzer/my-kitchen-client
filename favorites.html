@@ -2,7 +2,7 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <title>המטבח האישי שלי</title>
+  <title>המועדפים שלי</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,17 +13,18 @@
       <li><a href="index.html">דף בית</a></li>
       <li><a href="search.html">חיפוש</a></li>
       <li><a href="add.html">הוספת מתכון</a></li>
-      <li><a href="favorites.html">מועדפים</a></li>
+      <li><a href="favorites.html" class="active">מועדפים</a></li>
       <li><a href="profile.html">פרופיל</a></li>
       <li><a href="login.html">התחברות/הרשמה</a></li>
     </ul>
   </nav>
   <main>
-    <h1>ברוך הבא למטבח האישי שלך!</h1>
-    <!-- כאן יופיע תוכן דף הבית בעתיד -->
+    <h2>המועדפים שלי</h2>
+    <div id="favoritesBox"><!-- בדיקת התחברות תתבצע אוטומטית ב-favorites.js --></div>
   </main>
   <footer>
     <p>© המטבח האישי שלי</p>
   </footer>
+  <script src="favorites.js"></script>
 </body>
-</html>
+</html> 

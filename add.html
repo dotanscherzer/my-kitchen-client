@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>הוספת מתכון</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="direction: rtl; text-align: center; font-family: sans-serif;">
+  <nav class="navbar">
+    <div class="navbar-logo">🍳 המטבח האישי שלי</div>
+    <ul class="navbar-links">
+      <li><a href="index.html">דף בית</a></li>
+      <li><a href="search.html">חיפוש</a></li>
+      <li><a href="add.html" class="active">הוספת מתכון</a></li>
+      <li><a href="favorites.html">מועדפים</a></li>
+      <li><a href="profile.html">פרופיל</a></li>
+      <li><a href="login.html">התחברות/הרשמה</a></li>
+    </ul>
+  </nav>
+  <main>
+    <h2>הוספת מתכון / ייבוא מתכון</h2>
+    <div id="addBox"><!-- בדיקת התחברות תתבצע אוטומטית ב-add.js --></div>
+    <div id="addFormBox">
+      <form id="addRecipeForm" style="margin:0 auto; max-width:400px; background:#f4f6fa; border-radius:18px; box-shadow:0 2px 8px #e0e6ef; padding:32px 18px;">
+        <input type="text" id="newTitle" placeholder="שם מתכון" required style="width:100%; margin-bottom:12px;"><br>
+        <textarea id="newIngredients" rows="3" placeholder="רכיבים (כל רכיב בשורה)" required style="width:100%; margin-bottom:12px;"></textarea><br>
+        <textarea id="newInstructions" rows="4" placeholder="הוראות הכנה" required style="width:100%; margin-bottom:12px;"></textarea><br>
+        <button type="submit">הוסף מתכון</button>
+      </form>
+      <div class="import-inline" style="margin:32px auto 0 auto; max-width:400px;">
+        <label for="importUrlInput" style="font-weight:bold;">או ייבא מתכון מאתר:</label>
+        <input type="text" id="importUrlInput" placeholder="הדבק כתובת אתר מתכון" style="width:100%;">
+        <button id="importBtn">ייבא</button>
+        <span id="importStatus" style="display:block; color:#1c2d5a; margin-top:6px;"></span>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>© המטבח האישי שלי</p>
+  </footer>
+  <script src="add.js"></script>
+</body>
+</html> 

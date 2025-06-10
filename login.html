@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>התחברות / הרשמה</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body style="direction: rtl; text-align: center; font-family: sans-serif;">
+  <nav class="navbar">
+    <div class="navbar-logo">🍳 המטבח האישי שלי</div>
+    <ul class="navbar-links">
+      <li><a href="index.html">דף בית</a></li>
+      <li><a href="search.html">חיפוש</a></li>
+      <li><a href="add.html">הוספת מתכון</a></li>
+      <li><a href="favorites.html">מועדפים</a></li>
+      <li><a href="profile.html">פרופיל</a></li>
+      <li><a href="login.html" class="active">התחברות/הרשמה</a></li>
+    </ul>
+  </nav>
+  <main>
+    <h2>התחברות / הרשמה</h2>
+    <div id="loginBox">
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="אימייל" required><br>
+        <input type="password" id="loginPassword" placeholder="סיסמה" required><br>
+        <button type="submit">התחבר</button>
+      </form>
+      <hr style="margin:24px 0;">
+      <form id="registerForm">
+        <input type="text" id="registerName" placeholder="שם מלא" required><br>
+        <input type="email" id="registerEmail" placeholder="אימייל" required><br>
+        <input type="password" id="registerPassword" placeholder="סיסמה" required><br>
+        <button type="submit">הרשמה</button>
+      </form>
+      <hr style="margin:24px 0;">
+      <div id="g_id_onload"
+        data-client_id="GOOGLE_CLIENT_ID_HERE"
+        data-context="signin"
+        data-ux_mode="popup"
+        data-callback="handleGoogleLogin"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+        data-type="standard"
+        data-shape="pill"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-size="large"
+        data-logo_alignment="right">
+      </div>
+      <div id="loginStatus" style="margin-top:18px; min-height:24px;"></div>
+    </div>
+  </main>
+  <footer>
+    <p>© המטבח האישי שלי</p>
+  </footer>
+  <script src="login.js"></script>
+</body>
+</html> 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>חיפוש מתכונים</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="direction: rtl; text-align: center; font-family: sans-serif;">
+  <nav class="navbar">
+    <div class="navbar-logo">🍳 המטבח האישי שלי</div>
+    <ul class="navbar-links">
+      <li><a href="index.html">דף בית</a></li>
+      <li><a href="search.html" class="active">חיפוש</a></li>
+      <li><a href="add.html">הוספת מתכון</a></li>
+      <li><a href="favorites.html">מועדפים</a></li>
+      <li><a href="profile.html">פרופיל</a></li>
+      <li><a href="login.html">התחברות/הרשמה</a></li>
+    </ul>
+  </nav>
+  <main>
+    <h2>חיפוש מתכונים / יצירת מתכון אוטומטי</h2>
+    <div id="searchFormsBox" style="margin:0 auto; max-width:500px; background:#f4f6fa; border-radius:18px; box-shadow:0 2px 8px #e0e6ef; padding:32px 18px;">
+      <form id="searchForm" style="margin-bottom:18px;">
+        <input type="text" id="searchInput" placeholder="חפש מתכון (למשל: עוף)" style="width:70%;">
+        <button type="submit">חפש</button>
+      </form>
+      <form id="generateForm">
+        <input type="text" id="myIngredientsInput" placeholder="רשום רכיבים מופרדים בפסיקים" style="width:70%;">
+        <button type="submit">צור מתכון ממה שיש בבית</button>
+      </form>
+    </div>
+    <div id="searchResultsBox" style="margin-top:32px;"></div>
+  </main>
+  <footer>
+    <p>© המטבח האישי שלי</p>
+  </footer>
+  <script src="search.js"></script>
+</body>
+</html> 
