@@ -1,9 +1,9 @@
 // search.js
+const apiBase = "https://my-kitchen-server.onrender.com";
 (function() {
   const token = localStorage.getItem('token');
   const userName = localStorage.getItem('userName') || '';
   const resultsBox = document.getElementById('searchResultsBox');
-  const apiBase = "https://my-kitchen-server.onrender.com";
 
   // חיפוש מתכונים
   const searchForm = document.getElementById('searchForm');
@@ -20,7 +20,7 @@
           resultsBox.innerHTML = '<div style="color:#c00;">לא נמצאו מתכונים.</div>';
           return;
         }
-        renderRecipes(data);
+        renderRecipesCarousel(data);
       } catch (err) {
         resultsBox.innerHTML = '<div style="color:#c00;">שגיאה בחיפוש.</div>';
       }
@@ -46,19 +46,24 @@
           resultsBox.innerHTML = '<div style="color:#c00;">לא נוצר מתכון.</div>';
           return;
         }
-        // נניח ש-data.recipe הוא טקסט, נציג אותו ככרטיס
-        renderRecipes([parseGeneratedRecipe(data.recipe)]);
+        renderRecipesCarousel([parseGeneratedRecipe(data.recipe)]);
       } catch (err) {
         resultsBox.innerHTML = '<div style="color:#c00;">שגיאה ביצירת מתכון.</div>';
       }
     };
   }
 
-  // הצגת כרטיסי מתכון
-  function renderRecipes(recipes) {
-    let html = `<div class="recipes-list" style="display:flex; flex-wrap:wrap; gap:24px; justify-content:center;">`;
+  // קרוסלה אופקית עם כפתור הצג עוד
+  function renderRecipesCarousel(recipes) {
+    resultsBox.innerHTML = '';
+    const carouselContainer = document.createElement('div');
+    carouselContainer.className = 'recipes-carousel-container';
+    const list = document.createElement('div');
+    list.className = 'recipes-list';
     recipes.forEach((r, idx) => {
-      html += `<div class="recipe-card" style="flex:0 0 320px; min-width:320px; max-width:340px; position:relative;">
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      card.innerHTML = `
         <h3 style="color:#00897b; font-size:1.3rem; margin-bottom:10px;">${r.title || 'מתכון'}</h3>
         <b>רכיבים:</b>
         <table style="width:100%; background:#f1f8e9; border-radius:8px; overflow:hidden; margin-bottom:10px;"><tbody>
@@ -66,18 +71,20 @@
         </tbody></table>
         <b>הוראות:</b>
         <div class="instructions" style="background:#e3f2fd; border-radius:10px; padding:10px; margin-bottom:10px; color:#263238; font-size:1.05rem; line-height:1.7;">${r.instructions||''}</div>
-        <button class="fav-btn" data-idx="${idx}" style="background:#ffd54f; color:#a67c00; border:1px solid #ffe082; border-radius:8px; margin-top:8px; font-weight:bold; cursor:pointer;">הוסף למועדפים</button>
-        <div class="fav-status" style="min-height:18px; font-size:0.95rem; margin-top:4px;"></div>
-      </div>`;
-    });
-    html += '</div>';
-    resultsBox.innerHTML = html;
-    // טיפול בכפתורי מועדפים
-    document.querySelectorAll('.fav-btn').forEach(btn => {
-      btn.onclick = async function() {
-        const idx = btn.getAttribute('data-idx');
-        const recipe = recipes[idx];
-        const statusDiv = btn.parentElement.querySelector('.fav-status');
+      `;
+      // כפתור הוסף למועדפים
+      const favBtn = document.createElement('button');
+      favBtn.className = 'fav-btn';
+      favBtn.innerText = 'הוסף למועדפים';
+      favBtn.style.background = '#ffd54f';
+      favBtn.style.color = '#a67c00';
+      favBtn.style.border = '1px solid #ffe082';
+      favBtn.style.borderRadius = '8px';
+      favBtn.style.marginTop = '8px';
+      favBtn.style.fontWeight = 'bold';
+      favBtn.style.cursor = 'pointer';
+      favBtn.onclick = async function() {
+        const statusDiv = card.querySelector('.fav-status');
         if (!token) {
           statusDiv.innerText = 'יש להתחבר כדי להוסיף למועדפים';
           statusDiv.style.color = '#c00';
@@ -92,7 +99,7 @@
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ' + token
             },
-            body: JSON.stringify({ recipeId: recipe._id || recipe.recipeId, title: recipe.title, ingredients: recipe.ingredients, instructions: recipe.instructions })
+            body: JSON.stringify({ recipeId: r._id || r.recipeId, title: r.title, ingredients: r.ingredients, instructions: r.instructions })
           });
           if (res.status === 401 || res.status === 403) {
             window.location.href = 'login.html';
@@ -102,19 +109,57 @@
           if (!res.ok) throw new Error(data.error || 'שגיאה בהוספה');
           statusDiv.innerText = 'נוסף למועדפים!';
           statusDiv.style.color = 'green';
-          btn.disabled = true;
-          btn.style.opacity = 0.5;
+          favBtn.disabled = true;
+          favBtn.style.opacity = 0.5;
         } catch (err) {
           statusDiv.innerText = err.message || 'שגיאה לא ידועה';
           statusDiv.style.color = '#c00';
         }
       };
+      card.appendChild(favBtn);
+      // פידבק הוספה
+      const favStatus = document.createElement('div');
+      favStatus.className = 'fav-status';
+      favStatus.style.minHeight = '18px';
+      favStatus.style.fontSize = '0.95rem';
+      favStatus.style.marginTop = '4px';
+      card.appendChild(favStatus);
+      // כפתור הצג עוד
+      const showMoreBtn = document.createElement('button');
+      showMoreBtn.className = 'show-more-btn';
+      showMoreBtn.innerText = card.classList.contains('expanded') ? 'הסתר' : 'הצג עוד';
+      showMoreBtn.style.display = 'block';
+      showMoreBtn.onclick = (e) => {
+        e.stopPropagation();
+        card.classList.toggle('expanded');
+        showMoreBtn.innerText = card.classList.contains('expanded') ? 'הסתר' : 'הצג עוד';
+      };
+      card.appendChild(showMoreBtn);
+      list.appendChild(card);
     });
+    carouselContainer.appendChild(list);
+    // חצים לגלילה
+    if (recipes.length > 2) {
+      const leftArrow = document.createElement('div');
+      leftArrow.className = 'carousel-arrow left';
+      leftArrow.innerHTML = '&#8592;';
+      leftArrow.onclick = () => {
+        list.scrollBy({ left: -360, behavior: 'smooth' });
+      };
+      const rightArrow = document.createElement('div');
+      rightArrow.className = 'carousel-arrow right';
+      rightArrow.innerHTML = '&#8594;';
+      rightArrow.onclick = () => {
+        list.scrollBy({ left: 360, behavior: 'smooth' });
+      };
+      carouselContainer.appendChild(leftArrow);
+      carouselContainer.appendChild(rightArrow);
+    }
+    resultsBox.appendChild(carouselContainer);
   }
 
   // עיבוד טקסט מתכון שנוצר אוטומטית
   function parseGeneratedRecipe(text) {
-    // חילוץ שם, רכיבים, הוראות (פשוט)
     let title = 'מתכון שנוצר';
     let ingredients = [];
     let instructions = '';
